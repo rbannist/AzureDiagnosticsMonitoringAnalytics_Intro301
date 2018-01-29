@@ -1,6 +1,6 @@
 # Azure Diagnostics, Monitoring, and Analytics - Intro (301) - VM/IaaS Focus
 
-This lab is focused on the operational aspects of working with Azure.  The subject areas in this lab were scoped with ITIL Service Operation practices in the areas of Problem Management, Event Management, and Incident Management serving in mind.
+This lab is focused on the operational aspects of working with Azure.  The subject areas in this lab were scoped with ITIL Service Operation practices in the areas of Problem Management, Event Management, and Incident Management in mind.
 
 <br><br>
 
@@ -52,11 +52,13 @@ Stay where you are within the Azure Portal because in the next exercise we will 
 
 The goal of the Alerts experience is to be the single place to view and manage all your Azure alerts.  In this exercise, before visiting the main Alerts Dashboard, we will start by setting up an alert in advance as we have an option to do so on the screen that we're currently on.
 
-You can configure and get information about alert rules using Azure Portal, PowerShell, Azure CLI, and the Azure Monitor REST API.  We will work with Azure Portal.
+You can configure and get information about alert rules using Azure Portal, PowerShell, Azure CLI, and the Azure Monitor REST API.
+
+This guide shows the use of Azure Portal.
 
 There are two ways to trigger an alert in Azure:
-- Metric values - The alert triggers when the value of a specified metric crosses a threshold you assign in either direction.
-- Activity log events - An alert can trigger on every event, or, only when certain events occurs.
+- Metric values - The alert triggers when the value of a specified metric crosses a threshold you assign in either direction
+- Activity log events - An alert can trigger on every event, or, only when certain events occurs
 
 We will setup a simple Activity log alert.
 
@@ -88,50 +90,33 @@ Re. actions, you can configure a metric alert to do the following when it trigge
 
 ![Create EMail Alert NIC New or Change Any Resource](images/6_AlertActions.png?raw=true)
 
-In this example, you will create an e-mail alert - select 'Email' under 'ACTION TYPE', enter an e-mail address that you can access the account/mailbox of, click 'Ok'.
+In this example, you will create an e-mail alert.   Select 'Email' under 'ACTION TYPE', enter an e-mail address that you can access the account/mailbox of, click 'Ok'.
 
-![Create EMail Alert Enter Email Address](images/7_EMailAlertNICNewChangeAny?raw=true)
+![Create EMail Alert Enter Email Address](images/7_EMailAlertNICNewChangeAny.png?raw=true)
 
 Lastly, name your action 'Network Interface Write Email'
 
-![Create EMail Alert Add Alert Name](images/8_AlertActionName?raw=true)
+![Create EMail Alert Add Alert Name](images/8_AlertActionName.png?raw=true)
 
-Now click 'Ok' to finish.
+Now click 'Ok' to finish and wait a few seconds until:
 
+![Create Alert and Action Group notification](images/9_AlertandActionGroupCreated.png?raw=true)
 
+Then check your e-mail inbox - you should see a new e-mail:
 
+![Create Alert and Action Group notification](images/10_ActionGroupCreatedEmail.png?raw=true)
 
 <br>
 
-### Step 1 - Browse to the Activity Log screen
+### Step 2 - Navigate to the main Alerts page and take a look around
+
+
+
+### Step 3 - Trigger and validate the Alert created in Step 1
 
 ??
 
-
-
 <br>
-
-### Step 1 - Browse to the Activity Log screen
-
-Click 'All services' in the top left corner of your browser window, scroll down to the 'MONITORING + MANAGEMENT' section, and select Activity Log.
-
-![Visit the Activity Log](images/1_ActivityLogVisit.png?raw=true)
-
-<br>
-
-### Step 1 - Browse to the Activity Log screen
-
-Click 'All services' in the top left corner of your browser window, scroll down to the 'MONITORING + MANAGEMENT' section, and select Activity Log.
-
-![Visit the Activity Log](images/1_ActivityLogVisit.png?raw=true)
-
-<br>
-
-
-
-
-
-
 
 END OF EXERCISE 2
 
