@@ -24,7 +24,7 @@ Click 'All services' in the top left corner of your browser window, scroll down 
 
 ### Step 2 - Filter the log entries
 
-Give it a few seconds and the page will load in full.  We will create an ad-hoc filter rather than building and saving a query.  Start by using the drop-down options to filter the logs in a way that is suitable in order to see activity related to the provisioning of your VM.  For example, the screenshot below shows a filter that captures my log entries based on me selecting the Resource Group that contains my VM and then coupling that with an extension to the 'Timespan' to 'Last week' as my particular VM was created more than 1 day ago:
+Give it a few seconds and the page will load in full.  We will create an ad-hoc filter rather than building and saving a query.  Start by using the drop-down options to filter the logs in a way that is suitable in order to see activity related to the provisioning of your VM/one of your VMs (to be used during all of this lab).  For example, the screenshot below shows a filter that captures my log entries based on me selecting the Resource Group that contains my VM and then coupling that with an extension to the 'Timespan' to 'Last week' as my VM was created more than 1 day ago:
 
 ![Filter the Activity Log](images/2_ActivityLogFilter.png?raw=true)
 
@@ -139,7 +139,7 @@ Navigate using the same method as before:
 
 <br>
 
-You will be taken to a page that should list the new alert that you just created.  You should also see an 'Add activity log alert' button (which you'll not press but, FYI, that's how you create an alert from the main Alerts page vs. at the Activity Log level).
+You will be taken to a page that should list the new alert that you just created.  You should also see an 'Add activity log alert' button (which you'll not click on but, FYI, that's how you create an alert from the main Alerts page vs. at the Activity Log level).
 
 ![Alerts page](images/12_AlertsDashboard.png?raw=true)
 
@@ -235,7 +235,7 @@ The Azure diagnostics extension is needed (Windows or Linux) to collect most app
 
 Without the diagnostics extension, only a few metrics - like CPU usage - are available.
 
-In this exercise you will be checking that boot diagnostics logs are being collected on a given/your VM (which they will be because you configured your VM to do so in a previous lab) and then inspecting the logs using Azure Portal, a manual download from the backing Storage Account, and then lastly with Azure CLI.  You will then enable Guest OS-level diagnostic logging on your VM and inpsect the output.
+In this exercise you will be checking that boot diagnostics log entries are being collected on a given/your VM (which they will be because you configured your VM to do so in a previous lab) and then you'll inspect the log using Azure Portal, a manual download from the backing Storage Account, and then lastly with Azure CLI.  You will then enable Guest OS-level diagnostic logging on your VM.
 
 <br><br>
 
@@ -267,7 +267,7 @@ Here you will see the serial log for the VM in question.  The Serial log is popu
 
 The serial log is stored as a .log file in a backing Storage Account alongside, in the case of Windows, a latest .bmp format screenshot image.  The log can be downloaded directly from the page that you're on ('Boot diagnostics') by clicking 'Download serial log'.
 
-However, this guide is going to take you to have a look around the backing Storage Account with you downloading the log file from there.  Make a mental note of the Storage Account name that was displayed when you checked that the services was on (or go back and check if needbe).
+However, this guide is going to take you to have a look around the backing Storage Account with you downloading the log file from there.  Make a mental note of the Storage Account name that was displayed when you checked that the services was on (or go back and note down if needed).
 
 <br>
 
@@ -365,7 +365,7 @@ Here you can see all of the options available to you in respect to guest-level m
 * 'Configure performance counters'
   * This takes you to the 'Performance counters' tab to the right of the 'Overview' tab.
   * Here you will see a toggle switch for 'None', 'Basic', 'Custom'.  'None' = No counters, 'Basic' = A default list of counters with fixed sample rates inc. CPU, Memory, Disk, and Network, and 'Custom' = choose a counters based on any metric that's supported and set custom sample rates per-counter
-*- 'Configure event logs'
+* 'Configure event logs'
   * This takes you to the 'Logs' tab to the right of the 'Performance counters' tab
   * This is similar to Performance Counters in that you have a choice of 'None', 'Basic', and 'Custom'.  Here you can select which types and levels of logs to collect
 * 'Configure directories'
@@ -399,6 +399,10 @@ Now, click on the 'Logs' tab or 'Configure event logs' on the Overview tab.
 Here, we will change a couple of settings.  Click the 'Audit success' event check box in the 'SECURITY' section and the 'Information' event check box under 'SYSTEM' and then click 'Save'.
 
 ![Diagnostics Settings Logs](images/34_DiagnosticsSettingsChangeSecurityAuditSetting.png?raw=true)
+
+<br>
+
+Guest-OS level monitoring is now turned on for your VM.
 
 <br>
 
@@ -488,6 +492,42 @@ Here's a snapshot of what to expect however:
 
 ### Step 4 - Network Watcher
 
+Network Watcher is a regional service that adds diagnostic and visualisation tools to allow you to monitor and diagnose conditions at a network scenario level in, to, and from Azure.
+
+Network Watcher currently has the following capabilities:
+
+* Topology
+  * Provides a network level view showing the various interconnections and associations between network resources in a resource group
+* Variable Packet capture
+  * Captures packet data in and out of a virtual machine.  The packet data can be stored in a blob store or on the local disk in .cap format
+* IP flow verify
+  * Checks if a packet is allowed or denied based on flow information 5-tuple packet parameters (Destination IP, Source IP, Destination Port, Source Port, and Protocol)
+* Next hop
+  * Determines the next hop for packets being routed in the Azure Network Fabric
+* Security group view
+  * Gets the effective and applied security rules that are applied on a VM
+* NSG Flow logging
+  * Flow logs for Network Security Groups enable you to capture logs related to traffic that are allowed or denied by the security rules in the group
+* Virtual Network Gateway and Connection troubleshooting
+  * Provides the ability to troubleshoot Virtual Network Gateways and Connections
+* Network subscription limits
+  * View your network resource usage against limits
+* Configuring Diagnostics Log
+  * A single pane to enable or disable Diagnostics logs for network resources in a resource group
+* Connectivity (Preview)
+  * Verifies the possibility of establishing a direct TCP connection from a virtual machine to a given endpoint
+
+<br>
+
+The introduction to Network Watcher featured in this guide is related to the 'Topology' and 'Next hop' capabilities.
+
+Note. Some of the capabilities rely on a Network Watcher Agent Extension being installed on a given VM.
+
+<br>
+
+Navigate to the 'Network Watcher' blade:
+
+
 
 
 <br><br>
@@ -525,3 +565,22 @@ Application Insights offers application performance monitoring and user analytic
 <br>
 
 Richard/James to demonstrate.
+
+<br><br>
+
+## Exercise 7 - Explore Security Center
+
+Azure Security Center provides security management and advanced threat protection across hybrid cloud workloads.  You can apply security policies across your workloads, limit your exposure to threats, and detect and respond to attacks.  Securiy Center provides:
+
+* Centralised policy management
+* Continuous security assessment
+* Actionable recommendations
+* Advanced cloud defenses inc. just in time access to management ports and whitelisting to control applications running on your VMs
+* Prioritised alerts and incidents
+* Integrated security solutions inc. collecting, searching, and analysing security data from a variety of sources
+
+<br>
+
+Richard/James to demonstrate.
+
+<br><br>
