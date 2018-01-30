@@ -22,7 +22,7 @@ Click 'All services' in the top left corner of your browser window, scroll down 
 
 ### Step 2 - Filter the log entries
 
-Give it a few seconds and the page will load in full.  We will create a filter ad-hoc rather than building and saving a query.  Start by using the drop-down options to filter the logs in a way that is suitable in order to see activity related to the provisioning of your VM.  For example, the screenshot below shows a filter that captures my log entries by selecting the Resource Group that contains my VM and coupling that with extending the 'Timespan' to 'Last week' as my VM was created more than 1 day ago:
+Give it a few seconds and the page will load in full.  We will create an ad-hoc filter rather than building and saving a query.  Start by using the drop-down options to filter the logs in a way that is suitable in order to see activity related to the provisioning of your VM.  For example, the screenshot below shows a filter that captures my log entries based on me selecting the Resource Group that contains my VM and then coupling that with an extension to the 'Timespan' to 'Last week' as my particular VM was created more than 1 day ago:
 
 ![Filter the Activity Log](images/2_ActivityLogFilter.png?raw=true)
 
@@ -66,7 +66,7 @@ You will setup a simple Activity log alert.
 
 ### Step 1 - Create an Activity log alert
 
-On the screen that you're currently on, click 'Add activity log alert'.
+Click 'Add activity log alert' on the page that you're currently on.
 
 ![Create Alert in Activity Log](images/5_AlertscreatefromActivitylog.png?raw=true)
 
@@ -74,7 +74,7 @@ On the screen that you're currently on, click 'Add activity log alert'.
 
 Now, add names and change the settings:
 
-- Choose the resource group that you setup for VM creation earlier rather than creating a new 'Default' one (this helps with clearing up later + keeping environments separate)
+- Choose the resource group that you setup for VM creation earlier rather than creating a new 'Default' one for action group association (this helps with clearing up later + keeping environments separate)
 - Limit the 'Resource type' to 'Network Interfaces (Microsoft.Network/networkinterfaces)'
 - As the alert is limited to the logged-in user by default, we'll expand both the 'Resource Group' and 'Resource' in scope to 'All' in order to capture any event of this type performed by you-alone
 - Change the 'Operation name' value to 'Create or Update Network Interface (networkinterfaces)'
@@ -165,7 +165,7 @@ You have now configured an Alert and verified that it's being triggered under th
 
 ### Step 4 - An introduction to Azure Monitor
 
-So far, you have worked with the Acitivity Log and Alerts.  Many of the operational tools available in Azure have been aggregated in one place.  This aggregation is provided by something called Azure Monitor.  Azure Monitor provides base-level infrastructure metrics and logs for most services in Microsoft Azure.
+So far, you have worked with the Acitivity Log and Alerts.  Many of the operational tools available in Azure have been consolidated into one place.  This consolidation is provided by Azure Monitor.  Azure Monitor provides base-level infrastructure metrics and logs for most services in Microsoft Azure.
 
 It has a landing page that helps you:
 - Understand the monitoring capabilities offered by Azure
@@ -219,9 +219,9 @@ The Azure diagnostics extension is needed (Windows or Linux) to collect most app
 - Crash Dumps
 - Customer Error Logs
 
-Without the diagnostics extension, only a few metrics like CPU usage are available.
+Without the diagnostics extension, only a few metrics - like CPU usage for instance - are available.
 
-In this exercise you will be checking that boot diagnostics logs are being collected on a given/your VM (which they will be because you configured your VM to do so in a previous lab) and then inspecting the logs using Azure Portal, a manual download from the backing Storage Account, and then lastly with Azure CLI and PowerShell.  You will then enable Guest OS-level diagnostic logging on your VM and inpsect the output.
+In this exercise you will be checking that boot diagnostics logs are being collected on a given/your VM (which they will be because you configured your VM to do so in a previous lab) and then inspecting the logs using Azure Portal, a manual download from the backing Storage Account, and then lastly with Azure CLI.  You will then enable Guest OS-level diagnostic logging on your VM and inpsect the output.
 
 <br><br>
 
@@ -237,6 +237,12 @@ You will see that boot diagnostics is already turned on and the logs are being s
 
 ![Boot diagnostics screen](images/22_BootDiagnosticsOn.png?raw=true)
 
+<br>
+
+If your Boot Diagnostics isn't switched on then please move the toggle switch to 'On', choose an existing Storage Account or create a new one, ensure that the 'Boot diagnostics' check box is selected, and then click 'Save'.  Note. I would advise opening up the Azure Portal in another tab/window and then reboot the VM (or do it using Azure CLI or PowerShell).
+
+<br>
+
 ### Step 2 - View the Serial log
 
 Close settings and click 'Serial log':
@@ -247,7 +253,7 @@ Here you will see the serial log for the VM in question.  The Serial log is popu
 
 The serial log is stored as a .log file in the backing Storage Account alongside the latest .bmp format screenshot image.  The log can be downloaded directly from the page that you're on ('Boot diagnostics') by clicking 'Download serial log'.
 
-However, this guide is going to take you to have a look around the backing Storage Account and download a log file from there.  Make a mental note of the Storage Account name that was displayed when you checked that the services was on.
+However, this guide is going to take you to have a look around the backing Storage Account with you downloading the log file from there.  Make a mental note of the Storage Account name that was displayed when you checked that the services was on.
 
 <br>
 
@@ -291,20 +297,93 @@ Depending on your browser [configuration], you'll either see the .log file open 
 
 <br>
 
-### Step 4 - Download the Serial log using PowerShell
+We took the approach of accessing the backing Storage Account to show how straightforward it is to work with a log file.  As it's sat in its native format in a Storage Account, all of the activities that you can perform with blobs are available to you.  This includes building an archive of your logs in a separate Storage Account by copying from one Storage Account to another for instance or simply downloading the blob using a SAS + URL.
+ 
+<br>
 
+Please see below for a full view of the options available when working with logs:
 
+![Logs output](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/media/monitoring-overview-of-diagnostic-logs/diagnostics_logs_actions.png?raw=true)
+
+You can:
+- Save them to a Storage Account for auditing or manual inspection. You can specify the retention time (in days) using resource diagnostic settings
+- Stream them to Event Hubs for ingestion by a third-party service or custom analytics solution such as PowerBI
+- Analyse them with Log Analytics (which you'll be introduced to later)
 
 <br>
 
-### Step 4 - Download the Serial log using Azure CLI
+### Step 3 - Download the Serial log using Azure CLI
 
-
+Richard/James to demonstrate as this doesn't work when using the Cloud Shell.
 
 <br>
 
-### Step 5 - Enable Guest-OS diagnostics logs and inspect
+### Step 4 - Enable Guest-OS diagnostics logs
 
+Firsly, please navigate to your VM in the Azure Portal and enter the 'Diagnostics settings' blade.
+
+![Diagnostics Settings](images/30_DiagnosticsSettingsNavigate.png?raw=true)
+
+<br>
+
+Now, turn on the Guest OS logging by clicking on 'Enable guest-level monitoring' then and wait until the notification that tells you that the action is complete.
+
+![Guest Monitoring On](images/31_DiagnosticsSettingsOn.png?raw=true)
+
+<br>
+
+You should be presented with a page such as this:
+
+![Guest Monitoring](images/32_DiagnosticsSettingsOptions.png?raw=true)
+
+Here you can see all of the options available to you in respect to guest-level monitoring/logging.  This includes:
+
+- 'Configure performance counters'
+-- This takes you to the 'Performance counters' tab to the right of the 'Overview' tab.
+-- Here you will see a toggle switch for 'None', 'Basic', 'Custom'
+--- 'None' = No counters, 'Basic' = A default list of counters with fixed sample rates inc. CPU, Memory, Disk, and Network, and 'Custom' = choose a counters based on any metric that's supported and set custom sample rates per-counter
+- 'Configure event logs'
+-- This takes you to the 'Logs' tab to the right of the 'Performance counters' tab
+-- This is similar to Performance Counters in that you have a choice of 'None', 'Basic', and 'Custom'.  Here you can select which types and levels of logs to collect
+- 'Configure directories'
+-- This takes you to the 'Logs' tab to the right of the 'Performance counters' tab
+-- This is in relation to choosing the IIS logs to collect and the log directories to monitor
+- 'Configure crash dumps'
+-- This takes you to the 'Crash dumps' tab to the right of the 'Logs' tab
+-- Here you have a toggle switch for collecting memory dumps when a particular process crashes.
+- 'Configure sinks'
+-- This takes you to the 'Sinks' tab to the right of the 'Sinks' tab
+-- This is how you configure whether to send diagnostics data to Application Insights or not to provide advanced analytics for apps running on this VM
+- 'Configure agent'
+-- This takes you to the 'Agent' tab to the right of the 'Crash dumps' tab
+-- Here you configure additional options for the Azure Diagnostics agent such as Log Level, the backing Storage Account to use, and the disk quote
+- 'View boot diagnostics' and 'Configure boot diagnostics'
+-- This takes you to the settings of the VM that you're working with
+-- This is the settings page that you have visited in a prior exercise.
+
+<br>
+
+Click on the 'Performance counters' tab or 'Configure performance counters'.
+
+Take a look.  What performance counters are on and what is the sample rate?
+
+![Diagnostics Settings Performance Counters](images/33_DiagnosticsSettings.png?raw=true)
+
+<br>
+
+Now, click on the 'Logs' tab or 'Configure event logs' on the Overview tab.
+
+Here, we will change a setting.  Click the 'Audit success' event check box in the 'SECURITY' section and then click 'Save'.
+
+![Diagnostics Settings Logs](images/34_DiagnosticsSettingsChangeSecurityAuditSetting.png?raw=true)
+
+<br>
+
+The last thing we'll do in this step is...
+
+<br>
+
+### Step 5 - View Guest-OS diagnostics logs
 
 
 <br>
@@ -353,13 +432,13 @@ For some services, you may need to turn on diagnostics in order to see any metri
 
 On the left-side menu of Azure Monitor click 'Metrics' and then filter down to your VM.
 
-![Azure Monitor Metrics](images/30_AzureMonitorMetrics.png?raw=true)
+![Azure Monitor Metrics](images/36_AzureMonitorMetrics.png?raw=true)
 
 <br>
 
 Let's take a look at then Read and Write activity on your VM's virtual OS disk.  Click the '[Guest] \LogicalDisk(_Total)\Disk Read/sec' and '[Guest] \LogicalDisk(_Total)\Disk Writes/sec' check boxes.
 
-![Azure Monitor Metrics Disk Reads and Writes](images/31_AzureMonitorDiskRRW.png?raw=true)
+![Azure Monitor Metrics Disk Reads and Writes](images/37_AzureMonitorDiskRRW.png?raw=true)
 
 <br>
 
@@ -371,36 +450,47 @@ This is the type of information that is very useful when dealing with Investigat
 
 Log Analytics (formerly known as/aka OMS Log Analytics) is an Azure service that ingests log and metric data from Azure services (via Azure Monitor), Azure VMs, and on-premises or other cloud infrastructure and offers flexible log search and out-of-the box analytics on top of this data.  It provides rich tools to analyse data across sources, allows complex queries across all logs, and can proactively alert on specified conditions.  You can even collect custom data into its central repository so you can query and visualise it.  You can also take advantage of Log Analytic's built-in solutions to immediately gain insights into the security and functionality of your infrastructure.
 
-Due to some unpredictability in regard to the current state of Log Analytics setup in the subscription being used, Richard will lead an unscripted overview of this.
+When it comes to diagnostics logs, here's what you can do if you stream them into Log Analytics:
+- Log search - Write advanced queries over your log data, correlate logs from various sources, and even generate charts that can be pinned to your Azure dashboard
+- Alerting - Detect when one or more events match a particular query and become notified with an email or webhook call
+- Solutions - Use pre-built views and dashboards that give you immediate insight into your log data
+- Advanced analytics - Apply machine learning and pattern matching algorithms to identify possible issues revealed by your logs
+
+Due to some unpredictability in regard to the current state of your Log Analytics setup, Richard will lead an unscripted overview of this.
 
 Here's a snapshot of what to expect however:
 
-![Azure Monitor Log Analytics](images/32_AzureMonitorLogAnalytics.png?raw=true)
+![Azure Monitor Log Analytics](images/38_AzureMonitorLogAnalytics.png?raw=true)
 
 <br>
 
-![Azure Monitor Log Analytics](images/33_AzureMonitorLogAnalyticsOpen.png?raw=true)
+![Azure Monitor Log Analytics](images/39_AzureMonitorLogAnalyticsOpen.png?raw=true)
 
 <br>
 
-## Exercise 5 - Gather information from Azure Advisor to control spend
+## Exercise 5 - Gather information from Azure Advisor
 
 Azure Advisor is a personalised cloud consultant that helps you follow best practices to optimise your Azure deployments.  It analyses your resource configuration and usage telemetry.  It then recommends solutions to help improve the performance, security, and high availability of your resources while looking for opportunities to reduce your overall Azure spend.
 
 With Advisor, you can:
 
-- Get proactive, actionable, and personalised best practices recommendations.
-- Improve the performance, security, and high availability of your resources, as you identify opportunities to reduce your overall Azure spend.
-- Get recommendations with proposed actions inline.
+- Get proactive, actionable, and personalised best practices recommendations
+- Improve the performance, security, and high availability of your resources, as you identify opportunities to reduce your overall Azure spend
+- Get recommendations with proposed actions inline
 
-The recomendations that Azure Advisor provides can be accessed using the Azure Portal.
+The Advisor dashboard displays personalised recommendations for all your subscriptions. You can apply filters to display recommendations for specific subscriptions and resource types.  The recommendations are divided into four categories:
+- High Availability: To ensure and improve the continuity of your business-critical applications
+- Security: To detect threats and vulnerabilities that might lead to security breaches
+- Performance: To improve the speed of your applications
+- Cost: To optimise and reduce your overall Azure spending
 
-In this exercise you will be viewing high availability and security-related recommendations.
+In this exercise you will be viewing high availability and security-related recommendations related to your VM.
+
+Note. To use Azure Advisor with a subscription, a subscription Owner must launch the Advisor dashboard.  This action registers the subscription with Advisor.  From that point on, any subscription Owner, Contributor, or Reader can access the Advisor recommendations for the subscription.  The recommendations can sometimes take some time to populate.  If we find that is taking too long then Richard will share his screen.
 
 <br>
 
 ### Step 1 - Navigate to Azure Advisor
-
 
 
 
