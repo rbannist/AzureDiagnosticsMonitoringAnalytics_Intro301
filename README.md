@@ -6,9 +6,9 @@ This lab is focused on the operational aspects of working with Azure.  The subje
 
 ## Exercise 1 - Inspect Azure Activity Logs
 
-In this exercise we will look at the Activity Log in Azure.  The Activity Log provides insight into the operations that have been performed on resources in your subscription using Resource Manager.  For example, creating a virtual machine or deleting a Public IP will show up in the Activity Log.
+In this exercise you will look at the Activity Log in Azure.  The Activity Log provides insight into the operations that have been performed on resources in your subscription using Resource Manager.  For example, creating a virtual machine or deleting a Public IP will show up in the Activity Log.
 
-You created a Virtual Machine in a previous lab so there should be logs related to the creation of a Virtual Machine resource and other supporting resources such as a NIC, a Storage Account, an OS disk, etc. in your Activity Log.  So, let's take a look at your Activity Log entries related to the resources created during that lab.
+You created a Virtual Machine in a previous lab so there should be logs related to the creation of a Virtual Machine resource and other supporting resources such as a Network Interface, a Storage Account, an OS disk, etc. in your Activity Log.  So, let's take a look at your Activity Log entries related to the resources created during that lab.
 
 <br>
 
@@ -22,7 +22,7 @@ Click 'All services' in the top left corner of your browser window, scroll down 
 
 ### Step 2 - Filter the log entries
 
-Give it a few seconds and the page will load in full.  We will create a filter ad-hoc rather than building and saving a query.  Start by using the drop-down options to filter the logs in a way that is suitable in order to see activity related to the provisioning of your VM.  For example, the screenshot below shows a filter that captures my log entries by selecting the Resource Group that contains my VM and coupling that with extending the 'Timespan' to 1 week as my VM was created more than 1 day ago:
+Give it a few seconds and the page will load in full.  We will create a filter ad-hoc rather than building and saving a query.  Start by using the drop-down options to filter the logs in a way that is suitable in order to see activity related to the provisioning of your VM.  For example, the screenshot below shows a filter that captures my log entries by selecting the Resource Group that contains my VM and coupling that with extending the 'Timespan' to 'Last week' as my VM was created more than 1 day ago:
 
 ![Filter the Activity Log](images/2_ActivityLogFilter.png?raw=true)
 
@@ -44,13 +44,13 @@ As an example of gathering information from the log entries, I have expanded an 
 
 #### END OF EXERCISE 1
 
-Stay where you are within the Azure Portal because in the next exercise we will be configuring an Activity Log Alert.
+Stay where you are within the Azure Portal because in the next exercise you will be configuring an Activity Log Alert.
 
 <br><br>
 
 ## Exercise 2 - Setting up Alerts
 
-The goal of the Alerts experience is to be the single place to view and manage all your Azure alerts.  In this exercise, before visiting the main Alerts page, we will start by setting up an alert in advance as we have an option to do so on the screen that we're currently on.
+The goal of the Alerts experience is to be the single place to view and manage all your Azure alerts.  In this exercise, before visiting the main Alerts page, you will start by setting up an alert in advance as you have an option to do so on the screen that you're currently on.
 
 You can configure and get information about alert rules using Azure Portal, PowerShell, Azure CLI, and the Azure Monitor REST API.
 
@@ -101,7 +101,7 @@ In this example, you will create an e-mail alert.   Select 'Email' under 'ACTION
 
 Name your action `Network Interface Write` ...
 
-![Create EMail Alert Add Alert Name](images/8_AlertActionName.png?raw=true)
+![Create EMail Alert Add Alert Name](images/8_AlertEmailActionName.png?raw=true)
 
 <br>
 
@@ -111,7 +111,7 @@ Name your action `Network Interface Write` ...
 
 <br>
 
-Lastly, check your e-mail inbox - you should see a new e-mail:
+Lastly, check your e-mail inbox.  You should see a new e-mail in there:
 
 ![Create Alert and Action Group notification](images/10_ActionGroupCreatedEmail.png?raw=true)
 
@@ -165,7 +165,7 @@ You have now configured an Alert and verified that it's being triggered under th
 
 ### Step 4 - An introduction to Azure Monitor
 
-So far, we have worked with the Acitivity Log and Alerts.  Many of the operational tools available in Azure have been aggregated into one place.  This aggregation is within something called Azure Monitor.  Azure Monitor provides base-level infrastructure metrics and logs for most services in Microsoft Azure.
+So far, you have worked with the Acitivity Log and Alerts.  Many of the operational tools available in Azure have been aggregated in one place.  This aggregation is provided by something called Azure Monitor.  Azure Monitor provides base-level infrastructure metrics and logs for most services in Microsoft Azure.
 
 It has a landing page that helps you:
 - Understand the monitoring capabilities offered by Azure
@@ -223,38 +223,73 @@ Browse to your previously-created VM in the Azure Portal by clicking on 'Virtual
 
 Once you have clicked on your VM you should see 'Boot diagnostics' on the left side.  Click that.
 
-![Boot diagnostics](images/1_BootDiagnosticsScreen.png?raw=true)
+![Boot diagnostics](images/20_BootDiagnosticsScreen.png?raw=true)
 
 You will see that boot diagnostics is already turned on and the logs are being stored in a dedicated Storage Account (in blob/object storage). 
 
-![Boot diagnostics screen](images/2_BootDiagnosticsOn.png?raw=true)
+![Boot diagnostics screen](images/21_BootDiagnosticsOn.png?raw=true)
 
 Now, on the same screen, click 'Serial log':
 
-![Boot diagnostics Serial log](images/3_BootDiagnosticsSeriallog.png?raw=true)
+![Boot diagnostics Serial log](images/22_BootDiagnosticsSeriallog.png?raw=true)
 
-Here you will see the serial log for the VM in question.  The Serial log is populated by the Azure VM Agent or when events are printed to the terminal during boot.
+Here you will see the serial log for the VM in question.  The Serial log is populated by the Azure VM Agent or when events are printed during boot.
 
-The serial log is stored as a ? file in the backing Storage Account and can be downloaded directly from the page shown after clicking 'Boot diagnostics' (see 'Download serial log').  However, we're going to go and take a look around the backing Storage Account.  Make a mental note of the Storage Account name that was displayed when you checked that the services was on.  We will now navigate to that Storage Account and download the serial log for your VM.  Please click 'Storage Accounts' on the left panel:
+The serial log is stored as a .log file in the backing Storage Account alongside the latest .bmp format screenshot image.  The log can be downloaded directly from the page that you're on ('Boot diagnostics') by clicking 'Download serial log'.
 
-You now need to filter/find the diagnnostics Storage Account:
+However, this guide is going to take you to have a look around the backing Storage Account and download a log file from there.  Make a mental note of the Storage Account name that was displayed when you checked that the services was on.
 
+Navigate to that Storage Account:
 
-Once you've clicked on the relevant Storage Account, click 'Blob', followed by the '' container.
+![All Storage Accounts](images/23_StorageAccounts.png?raw=true)
 
-## Exercise 4 - Leveraging Event Grid
+<br>
 
-Event Grid helps you build reactive, event-driven apps with a fully managed event routing service.  You can create richer app scenarios by connecting serverless logic to events from multiple sources inc. Azure services.
+Filter on anything unique in your Diagnostics Storage Account's name and click on the relevant Storage Account:
 
-In this exercise we will be...
+![Filter and Select Diagnostics Storage Account](images/24_StorageAccountsFilterandEnter.png?raw=true)
 
-## Exercise 5 - Gather information from Azure Monitor
+<br>
 
-Azure Monitor operates as a consolidated pipeline for all monitoring data from Azure services.  It gives you access to performance metrics and events that describe the operation of the Azure infrastructure and any Azure services you are using.  Azure Monitor is a monitoring data pipeline for your Azure environment, and offers that data directly into Log Analytics as well as 3rd party tools where you can gain insight into that data and combine it with data from on premises or other cloud resources.
+Enter the Storage Account's Blobs Service:
+
+![Enter Diagnostics Storage Account](images/25_StorageAccountBlobs.png?raw=true)
+
+<br>
+
+Here you will see a container that is holdingb your VM's diagnostics logs and images - click it:
+
+![Enter Diagnostics Storage Account Blobs Container](images/26_StorageAccountBlobContainer.png?raw=true)
+
+<br>
+
+You should now see two objects.  A .log log file and a .bmp screenshot image file.  Click the .log file entry.
+
+![.log Blob](images/27_StorageAccountBlobClick.png?raw=true)
+
+<br>
+
+Dependant on browser [configuration], you'll either see the .log file open in a new tab or need to download it and then open it.  Once one of those things have happened, take a look at the contents of the log file and familiarise yourself with what is included.
+
+<br>
+
+#### END OF EXERCISE 3
+
+<br><br>
+
+## Exercise 4 - Gather information from Azure Monitor
+
+As previously mentioned, Azure Monitor operates as a consolidated pipeline for all monitoring data from Azure services.  It gives you access to performance metrics and events that describe the operation of the Azure infrastructure and any Azure services you are using.
+
+Azure Monitor is a monitoring data pipeline for your Azure environment, and offers that data directly into Log Analytics as well as 3rd party tools where you can gain insight into that data and combine it with data from on premises or other cloud resources.
 
 The data presented by Azure Monitor can be accessed using the Azure Portal, Azure CLI, and a RESTful API.
 
-## Exercise 6 - Gather information from Azure Advisor to control spend
+In this exercise you will spend a bit more time with Azure Monitor.
+
+
+
+## Exercise 5 - Gather information from Azure Advisor to control spend
 
 Azure Advisor is a personalised cloud consultant that helps you follow best practices to optimise your Azure deployments.  It analyses your resource configuration and usage telemetry.  It then recommends solutions to help improve the performance, security, and high availability of your resources while looking for opportunities to reduce your overall Azure spend.
 
@@ -271,16 +306,22 @@ In this exercise we will be using the Azure Portal view high availability recomm
 
 
 
-## Exercise 7 - Gather information from Log Analytics
+## Exercise 6 - Gather information from Log Analytics
 
 Log Analytics (formerly known as/aka OMS Log Analytics) is an Azure service that ingests log and metric data from Azure services (via Azure Monitor), Azure VMs, and on-premises or other cloud infrastructure and offers flexible log search and out-of-the box analytics on top of this data.  It provides rich tools to analyse data across sources, allows complex queries across all logs, and can proactively alert on specified conditions.  You can even collect custom data into its central repository so you can query and visualise it.  You can also take advantage of Log Analytic's built-in solutions to immediately gain insights into the security and functionality of your infrastructure.
 
 In this exercise we will be... 
 
 
-## Exercise 8 - Explore App Insights and Security Center
+## Exercise 9 - Explore App Insights and Security Center
 
 Application Insights offers application performance monitoring and user analytics.  It monitors the code that you've written and applications that you've deployed on Azure, on-premises, or other clouds.  By instrumenting your application with the Application Insights SDK you can get access to a range of data including response times of dependencies, exception traces, debugging snapshots, and execution profiles.  It provides powerful tools for analysing this application telemetry while developing and operating your application.  It deeply integrates with Visual Studio to enable you to get right to the problem line(s) of code so you can fix it, and offers usage analytics to analyse customer usage of your applications for product managers as well.
 
 In this exercise we will be...
 
+
+## Exercise 10 - Leveraging Event Grid
+
+Event Grid helps you build reactive, event-driven apps with a fully managed event routing service.  You can create richer app scenarios by connecting serverless logic to events from multiple sources inc. Azure services.
+
+In this exercise we will be...
