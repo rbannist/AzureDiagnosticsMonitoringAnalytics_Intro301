@@ -147,7 +147,7 @@ Then click on 'IP configurations' followed by 'ipconfig1'.
 
 <br>
 
-Lastly, click on 'Static' on the radio button under 'Private IP address settings' - 'Assignment' followed by 'Save' (ensuring that the IP address is present/remains the same).
+Lastly, click on 'Static' on the toggle switch under 'Private IP address settings' - 'Assignment' followed by 'Save' (ensuring that the IP address is present/remains the same).
 
 ![VM NIC IPConfig Static](images/15_AlertsVMNICIPConfigStatic.png?raw=true)
 
@@ -197,21 +197,29 @@ Click into the 'Activity Log' and 'Alerts' pages... look familiar?
 
 <br>
 
-You will be introduced to other operational tools/solutions that are aggregated by Azure Monitor during the rest of this guide but feel free to click around now and take a look now.
-
-<br>
-
 #### END OF EXERCISE 2
 
 <br><br>
 
 ## Exercise 3 - Inspecting Boot Diagnostics Logs and Guest OS Diagnostics Logs
 
-VM Boot Diagnistics logs and Guest OS-level Diagnostics Logs fall under 'Event Management' from an ITIL viewpoint and visibility of these logs can aid efforts related to maintaining the health of IT services.  VM Boot Diagnostics logs are Resource-level diagnostics logs.
+VM Boot Diagnostics logs and Guest OS-level Diagnostics Logs fall under 'Event Management' from an ITIL viewpoint and visibility of these logs can aid efforts related to maintaining the health of IT services.  VM Boot Diagnostics logs are Resource-level diagnostics logs.
 
 Azure resource-level diagnostic logs are logs emitted by a resource.  The content of these logs varies by resource type.  Resource-level diagnostic logs provide insight into operations that were performed within that resource itself.  For example, getting a secret from a Key Vault would be logged in a Resource-level log.
 
 Guest OS-level diagnostic logs differ from Resource-level diagnostics logs. Guest OS diagnostic logs are those collected by an agent running inside of a virtual machine or other supported resource type.  Resource-level diagnostic logs require no agent and capture resource-specific data from the Azure platform itself, while guest OS-level diagnostic logs capture data from the operating system and applications running on a virtual machine.
+
+The Azure diagnostics extension is needed (Windows or Linux) to collect most application level metrics and logs. The types include:
+- Performance counters
+- Application Logs
+- Windows Event Logs
+- .NET Event Source
+- IIS Logs
+- Manifest based ETW
+- Crash Dumps
+- Customer Error Logs
+
+Without the diagnostics extension, only a few metrics like CPU usage are available.
 
 In this exercise you will be checking that boot diagnostics logs are being collected on a given/your VM (which they will be because you configured your VM to do so in a previous lab) and then inspecting the logs using Azure Portal, a manual download from the backing Storage Account, and then lastly with Azure CLI and PowerShell.  You will then enable Guest OS-level diagnostic logging on your VM and inpsect the output.
 
@@ -221,7 +229,7 @@ In this exercise you will be checking that boot diagnostics logs are being colle
 
 Browse to your previously-created VM in the Azure Portal by clicking on 'Virtual machines' and then filtering to find the relevant VM or by clicking on 'Resource groups', filtering by your resource group name, and then finding your VM within the relevant resource group.
 
-Once you have clicked on your VM you should see 'Boot diagnostics' on the left side.  Click that.
+Once you have clicked on your VM you should see 'Boot diagnostics' on the left side.  Click that followed by 'Settings'.
 
 ![Boot diagnostics](images/21_BootDiagnosticsScreen.png?raw=true)
 
@@ -229,7 +237,9 @@ You will see that boot diagnostics is already turned on and the logs are being s
 
 ![Boot diagnostics screen](images/22_BootDiagnosticsOn.png?raw=true)
 
-Now, on the same screen, click 'Serial log':
+### Step 2 - View the Serial log
+
+Close settings and click 'Serial log':
 
 ![Boot diagnostics Serial log](images/23_BootDiagnosticsSeriallog.png?raw=true)
 
@@ -239,7 +249,11 @@ The serial log is stored as a .log file in the backing Storage Account alongside
 
 However, this guide is going to take you to have a look around the backing Storage Account and download a log file from there.  Make a mental note of the Storage Account name that was displayed when you checked that the services was on.
 
-Navigate to that Storage Account:
+<br>
+
+### Step 3 - Download the Serial log
+
+Navigate to Storage Accounts:
 
 ![All Storage Accounts](images/24_StorageAccounts.png?raw=true)
 
@@ -257,7 +271,7 @@ Enter the Storage Account's Blobs Service:
 
 <br>
 
-Here you will see a container that is holdingb your VM's diagnostics logs and images - click it:
+Here you will see a container that is holding your VM's diagnostics log and screenshot image - click it:
 
 ![Enter Diagnostics Storage Account Blobs Container](images/27_StorageAccountBlobContainer.png?raw=true)
 
@@ -273,7 +287,25 @@ You should now see two objects.  A .log log file and a .bmp screenshot image fil
 
 <br>
 
-Dependant on browser [configuration], you'll either see the .log file open in a new tab or need to download it and then open it.  Once one of those things have happened, take a look at the contents of the log file and familiarise yourself with what is included.
+Depending on your browser [configuration], you'll either see the .log file open in a new tab or need to download it and then open it.  Once one of those things has happened, take a look at the contents of the log file and familiarise yourself with what is included in it.
+
+<br>
+
+### Step 4 - Download the Serial log using PowerShell
+
+
+
+<br>
+
+### Step 4 - Download the Serial log using Azure CLI
+
+
+
+<br>
+
+### Step 5 - Enable Guest-OS diagnostics logs and inspect
+
+
 
 <br>
 
@@ -281,17 +313,75 @@ Dependant on browser [configuration], you'll either see the .log file open in a 
 
 <br><br>
 
-## Exercise 4 - Gather information from Azure Monitor
+## Exercise 4 - Gather information from Azure Monitor - Metrics, Log Analytics, Service Health, App Insights, and Network Watcher
 
 As previously mentioned, Azure Monitor operates as a consolidated pipeline for all monitoring data from Azure services.  It gives you access to performance metrics and events that describe the operation of the Azure infrastructure and any Azure services you are using.
 
 Azure Monitor is a monitoring data pipeline for your Azure environment, and offers that data directly into Log Analytics as well as 3rd party tools where you can gain insight into that data and combine it with data from on premises or other cloud resources.
 
-The data presented by Azure Monitor can be accessed using the Azure Portal, Azure CLI, and a RESTful API.
+You can work with Azure Monitor data using the Monitor Azure Portal blade, Monitor PowerShell Cmdlets, Azure CLI, or Azure Monitor REST APIs.
 
-In this exercise you will spend a bit more time with Azure Monitor.
+In this exercise you will spend a bit more time with Azure Monitor by starting to use it as a starting point for other activities.
 
+<br>
 
+### Step 1 - Navigate back to Azure Monitor using the same method as before and read the information below
+
+When you open the Azure Monitor page, you can select among the subscriptions that you have read access to.  For a selected subscription, you can see:
+- Triggered alerts and alert sources - This table shows summary counts, alert sources, and how many times alerts fired for the selected time duration. It applies to both metric and activity log alerts. <Edit: Alerts (Preview) with unified experience also shown for all alerts - events, metrics and logs
+- Activity Log Errors - If any of your Azure resources log events with error-level severity, you can view a high-level count and click through to the activity log page to investigate each event
+- Azure Service Health - You can see a count of Service Health service issues, planned maintenance events, and health advisories. Azure Service Health provides personalized information when problems in the Azure infrastructure impact your services
+- Application Insights - See KPIs for each AppInsights resource in the current subscription. The KPIs are optimised for server-side application monitoring across ASP.NET web apps, Java, Node, and General application types. The KPIs include metrics for request rate, response duration, failure rate, and availability %
+
+If you have not on-boarded to Log Analytics or Application Insights, or if you have not configured any Azure Alerts in the current subscription, this page provides links to begin your on-boarding process.
+
+<br>
+
+#### Azure Monitor Sources - Compute:
+
+![Azure Monitor Sources Compute](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/media/monitoring-overview-azure-monitor/monitoring_azure_resources-compute_v6.png?raw=true)
+
+<br>
+
+### Step 2 - Take a look at Metrics related to your VM within Azure Monitor
+
+All Azure services track key metrics that allow you to monitor the health, performance, availability and usage of your services.  You can view these metrics in the Azure Portal.  You can also use the REST API or .NET SDK to access the full set of metrics programmatically.
+
+This guide focuses on the Azure Portal.
+
+For some services, you may need to turn on diagnostics in order to see any metrics.  For others, such as virtual machines - which is what this guide focuses on - you will get a basic set of metrics by default.
+
+On the left-side menu of Azure Monitor click 'Metrics' and then filter down to your VM.
+
+![Azure Monitor Metrics](images/30_AzureMonitorMetrics.png?raw=true)
+
+<br>
+
+Let's take a look at then Read and Write activity on your VM's virtual OS disk.  Click the '[Guest] \LogicalDisk(_Total)\Disk Read/sec' and '[Guest] \LogicalDisk(_Total)\Disk Writes/sec' check boxes.
+
+![Azure Monitor Metrics Disk Reads and Writes](images/31_AzureMonitorDiskRRW.png?raw=true)
+
+<br>
+
+This is the type of information that is very useful when dealing with Investigation and Diagnosis under the framing of ITIL Problem Management!
+
+<br>
+
+### Step 3 - Log Analytics intro
+
+Log Analytics (formerly known as/aka OMS Log Analytics) is an Azure service that ingests log and metric data from Azure services (via Azure Monitor), Azure VMs, and on-premises or other cloud infrastructure and offers flexible log search and out-of-the box analytics on top of this data.  It provides rich tools to analyse data across sources, allows complex queries across all logs, and can proactively alert on specified conditions.  You can even collect custom data into its central repository so you can query and visualise it.  You can also take advantage of Log Analytic's built-in solutions to immediately gain insights into the security and functionality of your infrastructure.
+
+Due to some unpredictability in regard to the current state of Log Analytics setup in the subscription being used, Richard will lead an unscripted overview of this.
+
+Here's a snapshot of what to expect however:
+
+![Azure Monitor Log Analytics](images/32_AzureMonitorLogAnalytics.png?raw=true)
+
+<br>
+
+![Azure Monitor Log Analytics](images/33_AzureMonitorLogAnalyticsOpen.png?raw=true)
+
+<br>
 
 ## Exercise 5 - Gather information from Azure Advisor to control spend
 
@@ -305,19 +395,17 @@ With Advisor, you can:
 
 The recomendations that Azure Advisor provides can be accessed using the Azure Portal.
 
-In this exercise we will be using the Azure Portal view high availability recommendations.
+In this exercise you will be viewing high availability and security-related recommendations.
+
+<br>
+
+### Step 1 - Navigate to Azure Advisor
 
 
 
 
-## Exercise 6 - Gather information from Log Analytics
 
-Log Analytics (formerly known as/aka OMS Log Analytics) is an Azure service that ingests log and metric data from Azure services (via Azure Monitor), Azure VMs, and on-premises or other cloud infrastructure and offers flexible log search and out-of-the box analytics on top of this data.  It provides rich tools to analyse data across sources, allows complex queries across all logs, and can proactively alert on specified conditions.  You can even collect custom data into its central repository so you can query and visualise it.  You can also take advantage of Log Analytic's built-in solutions to immediately gain insights into the security and functionality of your infrastructure.
-
-In this exercise we will be... 
-
-
-## Exercise 9 - Explore App Insights and Security Center
+## Exercise 6 - Explore App Insights and Security Center
 
 Application Insights offers application performance monitoring and user analytics.  It monitors the code that you've written and applications that you've deployed on Azure, on-premises, or other clouds.  By instrumenting your application with the Application Insights SDK you can get access to a range of data including response times of dependencies, exception traces, debugging snapshots, and execution profiles.  It provides powerful tools for analysing this application telemetry while developing and operating your application.  It deeply integrates with Visual Studio to enable you to get right to the problem line(s) of code so you can fix it, and offers usage analytics to analyse customer usage of your applications for product managers as well.
 
