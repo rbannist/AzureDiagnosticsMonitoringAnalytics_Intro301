@@ -60,7 +60,7 @@ There are two ways to trigger an alert in Azure:
 - Metric values - The alert triggers when the value of a specified metric crosses a threshold you assign in either direction
 - Activity log events - An alert can trigger on every event, or, only when certain events occurs
 
-We will setup a simple Activity log alert.
+You will setup a simple Activity log alert.
 
 <br>
 
@@ -125,9 +125,9 @@ Navigate using the same method as before:
 
 <br>
 
-You will be taken to a page that should list the new alert that you have just created.  You should also see an 'Add activity log alert' button (which you'll not press but, FYI, that's how you create an alert from the main Alerts page vs. at the Activity Log level).
+You will be taken to a page that should list the new alert that you just created.  You should also see an 'Add activity log alert' button (which you'll not press but, FYI, that's how you create an alert from the main Alerts page vs. at the Activity Log level).
 
-![Alerts page](images/11_AlertsNavigate.png?raw=true)
+![Alerts page](images/12_AlertsDashboard.png?raw=true)
 
 <br>
 
@@ -137,25 +137,25 @@ In order to trigger the alert you need to make a change to a Network Interface. 
 
 Start by navigating to the Resource Group that the VM resides in and then click the NIC that is listed:
 
-![VM NIC](images/12_AlertsVMNIC.png?raw=true)
+![VM NIC](images/13_AlertsVMNIC.png?raw=true)
 
 <br>
 
 Then click on 'IP configurations' followed by 'ipconfig1'.
 
-![VM NIC IPConfig](images/13_AlertsVMNICIPConfig.png?raw=true)
+![VM NIC IPConfig](images/14_AlertsVMNICIPConfig.png?raw=true)
 
 <br>
 
 Lastly, click on 'Static' on the radio button under 'Private IP address settings' - 'Assignment' followed by 'Save' (ensuring that the IP address is present/remains the same).
 
-![VM NIC IPConfig Static](images/14_AlertsVMNICIPConfigStatic.png?raw=true)
+![VM NIC IPConfig Static](images/15_AlertsVMNICIPConfigStatic.png?raw=true)
 
 <br>
 
 An e-mail should now arrive in the inbox of the account entered when the Alert Action was added.  This is what it should look like:
 
-![Action E-mail](images/15_AlertsActionEmail.png?raw=true)
+![Action E-mail](images/16_AlertsActionEmail.png?raw=true)
 
 <br>
 
@@ -177,23 +177,23 @@ The page is a starting point for navigation, including on-boarding.  It shows cu
 
 To introduce yourself to Azure Monitor, start by navigating to it:
 
-![Azure Monitor Navigate](images/16_AzureMonitorNavigate.png?raw=true)
+![Azure Monitor Navigate](images/17_AzureMonitorNavigate.png?raw=true)
 
 <br>
 
 The Azure Monitor Overview page provides a nice snapshot view of what's going on in a given Subscription.  See the 'Alert fired' count and the list of Alerts that have been fired:
 
-![Azure Monitor Overview](images/17_AzureMonitorOverview.png?raw=true)
+![Azure Monitor Overview](images/18_AzureMonitorOverview.png?raw=true)
 
 <br>
 
 Click into the 'Activity Log' and 'Alerts' pages... look familiar?
 
-![Azure Monitor Activity Log](images/18_AzureMonitorActivityLog.png?raw=true)
+![Azure Monitor Activity Log](images/19_AzureMonitorActivityLog.png?raw=true)
 
 <br>
 
-![Azure Monitor Alerts](images/19_AzureMonitorAlerts.png?raw=true)
+![Azure Monitor Alerts](images/20_AzureMonitorAlerts.png?raw=true)
 
 <br>
 
@@ -223,15 +223,15 @@ Browse to your previously-created VM in the Azure Portal by clicking on 'Virtual
 
 Once you have clicked on your VM you should see 'Boot diagnostics' on the left side.  Click that.
 
-![Boot diagnostics](images/20_BootDiagnosticsScreen.png?raw=true)
+![Boot diagnostics](images/21_BootDiagnosticsScreen.png?raw=true)
 
 You will see that boot diagnostics is already turned on and the logs are being stored in a dedicated Storage Account (in blob/object storage). 
 
-![Boot diagnostics screen](images/21_BootDiagnosticsOn.png?raw=true)
+![Boot diagnostics screen](images/22_BootDiagnosticsOn.png?raw=true)
 
 Now, on the same screen, click 'Serial log':
 
-![Boot diagnostics Serial log](images/22_BootDiagnosticsSeriallog.png?raw=true)
+![Boot diagnostics Serial log](images/23_BootDiagnosticsSeriallog.png?raw=true)
 
 Here you will see the serial log for the VM in question.  The Serial log is populated by the Azure VM Agent or when events are printed during boot.
 
@@ -241,31 +241,35 @@ However, this guide is going to take you to have a look around the backing Stora
 
 Navigate to that Storage Account:
 
-![All Storage Accounts](images/23_StorageAccounts.png?raw=true)
+![All Storage Accounts](images/24_StorageAccounts.png?raw=true)
 
 <br>
 
 Filter on anything unique in your Diagnostics Storage Account's name and click on the relevant Storage Account:
 
-![Filter and Select Diagnostics Storage Account](images/24_StorageAccountsFilterandEnter.png?raw=true)
+![Filter and Select Diagnostics Storage Account](images/25_StorageAccountsFilterandEnter.png?raw=true)
 
 <br>
 
 Enter the Storage Account's Blobs Service:
 
-![Enter Diagnostics Storage Account](images/25_StorageAccountBlobs.png?raw=true)
+![Enter Diagnostics Storage Account](images/26_StorageAccountBlobs.png?raw=true)
 
 <br>
 
 Here you will see a container that is holdingb your VM's diagnostics logs and images - click it:
 
-![Enter Diagnostics Storage Account Blobs Container](images/26_StorageAccountBlobContainer.png?raw=true)
+![Enter Diagnostics Storage Account Blobs Container](images/27_StorageAccountBlobContainer.png?raw=true)
 
 <br>
 
-You should now see two objects.  A .log log file and a .bmp screenshot image file.  Click the .log file entry.
+You should now see two objects.  A .log log file and a .bmp screenshot image file.  Click the .log file entry followed by the 'Download' button.
 
-![.log Blob](images/27_StorageAccountBlobClick.png?raw=true)
+![.log Blob](images/28_StorageAccountBlobClick.png?raw=true)
+
+<br>
+
+![.log Blob](images/29_StorageAccountBlobDownload.png?raw=true)
 
 <br>
 
