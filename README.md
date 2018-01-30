@@ -8,6 +8,8 @@ This lab is focused on the operational aspects of working with Azure.  The subje
 
 In this exercise you will look at the Activity Log in Azure.  The Activity Log provides insight into the operations that have been performed on resources in your subscription using Resource Manager.  For example, creating a virtual machine or deleting a Public IP will show up in the Activity Log.
 
+Activity logs have a 19-day data retention period.
+
 You created a Virtual Machine in a previous lab so there should be logs related to the creation of a Virtual Machine resource and other supporting resources such as a Network Interface, a Storage Account, an OS disk, etc. in your Activity Log.  So, let's take a look at your Activity Log entries related to the resources created during that lab.
 
 <br>
@@ -36,15 +38,27 @@ We're specifically interested in the creation of a Virtual Machine resource so e
 
 <br>
 
-As an example of gathering information from the log entries, I have expanded an 'Write-NetworkInterfaces' line and selected 'JSON'.  I am able to see the Public IP that was bound to the NIC of the VM at this time.
+As an example of gathering information from the log entries, I have expanded an 'Write-NetworkInterfaces' line and selected 'JSON'.  I am able to see the Public IP that was bound to the Network Interface of the VM at this time.  You should now find an equivalent 'Write-NetworkInterfaces' line in your log entries and expand on it/click on it.
 
 ![Activity Log VM write NIC with PIP](images/4_ActivityLogWriteNICPIP.png?raw=true)
+
+<br>
+
+You can fit Activity Logs in with integration scenarios such as:
+
+* Create an email or webhook alert that triggers off an Activity Log event
+* Stream into an Event Hub for ingestion by a third-party service or custom analytics solution such as PowerBI
+* Analyse in PowerBI using the PowerBI content pack
+* Save to a Storage Account for archival or manual inspection. You can specify the retention time (in days) using Log Profiles
+* Query and view in the Azure portal
+* Query via PowerShell Cmdlet, CLI, or REST API
+* Export the Activity Log with Log Profiles to log Analytics
 
 <br><br>
 
 #### END OF EXERCISE 1
 
-Stay where you are within the Azure Portal because in the next exercise you will be configuring an Activity Log Alert.
+Stay where you are within the Azure Portal because in the next exercise you will be configuring an Activity Log Alert which addresses the first bullet point above.
 
 <br><br>
 
@@ -74,18 +88,18 @@ Click 'Add activity log alert' on the page that you're currently on.
 
 Now, add names and change the settings:
 
-- Choose the resource group that you setup for VM creation earlier rather than creating a new 'Default' one for action group association (this helps with clearing up later + keeping environments separate)
-- Limit the 'Resource type' to 'Network Interfaces (Microsoft.Network/networkinterfaces)'
-- As the alert is limited to the logged-in user by default, we'll expand both the 'Resource Group' and 'Resource' in scope to 'All' in order to capture any event of this type performed by you-alone
-- Change the 'Operation name' value to 'Create or Update Network Interface (networkinterfaces)'
-- Choose 'Informational' under the 'Level' drop-down menu
-- Create a new Action Group by adding an appropriate name and a short name
-- Add an action
+1. Choose the resource group that you setup for VM creation earlier rather than creating a new 'Default' one for action group association (this helps with clearing up later + keeping environments separate)
+2. Limit the 'Resource type' to 'Network Interfaces (Microsoft.Network/networkinterfaces)'
+3. As the alert is limited to the logged-in user by default, we'll expand both the 'Resource Group' and 'Resource' in scope to 'All' in order to capture any event of this type performed by you-alone
+4. Change the 'Operation name' value to 'Create or Update Network Interface (networkinterfaces)'
+5. Choose 'Informational' under the 'Level' drop-down menu
+6. Create a new Action Group by adding an appropriate name and a short name
+7. Add an action
 
 Re. actions, amongst a few options, you can configure a metric alert to do the following:
-- Send email notifications
-- Call a webhook (e.g. a Logic App or Function HTTP trigger)
-- Start execution of an Azure Automation runbook
+* Send email notifications
+* Call a webhook (e.g. a Logic App or Function HTTP trigger)
+* Start execution of an Azure Automation runbook
 
 Here is the full list of action options as of 01/18:
 
@@ -165,11 +179,11 @@ You have now configured an Alert and verified that it's being triggered under th
 
 ### Step 4 - An introduction to Azure Monitor
 
-So far, you have worked with the Acitivity Log and Alerts.  Many of the operational tools available in Azure have been consolidated into one place.  This consolidation is provided by Azure Monitor.  Azure Monitor provides base-level infrastructure metrics and logs for most services in Microsoft Azure.
+So far, you have worked with the Acitivity Log and Alerts.  Many of the operational tools available in Azure have now been consolidated into one place.  The consolidated view is provided by Azure Monitor.  Azure Monitor provides base-level infrastructure metrics and logs for most services in Microsoft Azure.
 
 It has a landing page that helps you:
-- Understand the monitoring capabilities offered by Azure
-- Discover, configure, and on-board Azure’s platform and premium monitoring capabilities
+* Understand the monitoring capabilities offered by Azure
+* Discover, configure, and on-board Azure’s platform and premium monitoring capabilities
 
 While the Azure Monitor service is released, the landing overview page is in preview.
 
@@ -203,23 +217,23 @@ Click into the 'Activity Log' and 'Alerts' pages... look familiar?
 
 ## Exercise 3 - Inspecting Boot Diagnostics Logs and Guest OS Diagnostics Logs
 
-VM Boot Diagnostics logs and Guest OS-level Diagnostics Logs fall under 'Event Management' from an ITIL viewpoint and visibility of these logs can aid efforts related to maintaining the health of IT services.  VM Boot Diagnostics logs are Resource-level diagnostics logs.
+VM Boot Diagnostics logs and Guest OS-level Diagnostics Logs fall under 'Event Management' from an ITIL viewpoint and visibility of these logs can aid efforts related to maintaining the health of IT services.
 
-Azure resource-level diagnostic logs are logs emitted by a resource.  The content of these logs varies by resource type.  Resource-level diagnostic logs provide insight into operations that were performed within that resource itself.  For example, getting a secret from a Key Vault would be logged in a Resource-level log.
+VM Boot Diagnostics logs are Resource-level diagnostics logs.  Azure resource-level diagnostic logs are logs emitted by a resource.  The content of these logs varies by resource type.  Resource-level diagnostic logs provide insight into operations that were performed within that resource itself.  For example, getting a secret from a Key Vault would be logged in a Resource-level log.
 
 Guest OS-level diagnostic logs differ from Resource-level diagnostics logs. Guest OS diagnostic logs are those collected by an agent running inside of a virtual machine or other supported resource type.  Resource-level diagnostic logs require no agent and capture resource-specific data from the Azure platform itself, while guest OS-level diagnostic logs capture data from the operating system and applications running on a virtual machine.
 
 The Azure diagnostics extension is needed (Windows or Linux) to collect most application level metrics and logs. The types include:
-- Performance counters
-- Application Logs
-- Windows Event Logs
-- .NET Event Source
-- IIS Logs
-- Manifest based ETW
-- Crash Dumps
-- Customer Error Logs
+* Performance counters
+* Application Logs
+* Windows Event Logs
+* .NET Event Source
+* IIS Logs
+* Manifest based ETW
+* Crash Dumps
+* Customer Error Logs
 
-Without the diagnostics extension, only a few metrics - like CPU usage for instance - are available.
+Without the diagnostics extension, only a few metrics - like CPU usage - are available.
 
 In this exercise you will be checking that boot diagnostics logs are being collected on a given/your VM (which they will be because you configured your VM to do so in a previous lab) and then inspecting the logs using Azure Portal, a manual download from the backing Storage Account, and then lastly with Azure CLI.  You will then enable Guest OS-level diagnostic logging on your VM and inpsect the output.
 
@@ -239,7 +253,7 @@ You will see that boot diagnostics is already turned on and the logs are being s
 
 <br>
 
-If your Boot Diagnostics isn't switched on then please move the toggle switch to 'On', choose an existing Storage Account or create a new one, ensure that the 'Boot diagnostics' check box is selected, and then click 'Save'.  Note. I would advise opening up the Azure Portal in another tab/window and then reboot the VM (or do it using Azure CLI or PowerShell).
+If your Boot Diagnostics isn't switched on then please move the toggle switch to 'On', choose an existing Storage Account or create a new one, ensure that the 'Boot diagnostics' check box is selected, and then click 'Save'.  Note. I advise opening up the Azure Portal in another tab/window and then reboot the VM (or do it using Azure CLI or PowerShell).
 
 <br>
 
@@ -249,11 +263,11 @@ Close settings and click 'Serial log':
 
 ![Boot diagnostics Serial log](images/23_BootDiagnosticsSeriallog.png?raw=true)
 
-Here you will see the serial log for the VM in question.  The Serial log is populated by the Azure VM Agent or when events are printed during boot.
+Here you will see the serial log for the VM in question.  The Serial log is populated by the Azure VM Agent or when events are printed to serial console during boot.
 
-The serial log is stored as a .log file in the backing Storage Account alongside the latest .bmp format screenshot image.  The log can be downloaded directly from the page that you're on ('Boot diagnostics') by clicking 'Download serial log'.
+The serial log is stored as a .log file in a backing Storage Account alongside, in the case of Windows, a latest .bmp format screenshot image.  The log can be downloaded directly from the page that you're on ('Boot diagnostics') by clicking 'Download serial log'.
 
-However, this guide is going to take you to have a look around the backing Storage Account with you downloading the log file from there.  Make a mental note of the Storage Account name that was displayed when you checked that the services was on.
+However, this guide is going to take you to have a look around the backing Storage Account with you downloading the log file from there.  Make a mental note of the Storage Account name that was displayed when you checked that the services was on (or go back and check if needbe).
 
 <br>
 
@@ -293,22 +307,28 @@ You should now see two objects.  A .log log file and a .bmp screenshot image fil
 
 <br>
 
-Depending on your browser [configuration], you'll either see the .log file open in a new tab or need to download it and then open it.  Once one of those things has happened, take a look at the contents of the log file and familiarise yourself with what is included in it.
+Depending on your browser [configuration], you'll either see the .log file open in a new tab or you will need to download it and then open it.  Once one of those things has happened, take a look at the contents of the log file and familiarise yourself with what is included in it.
 
 <br>
 
-We took the approach of accessing the backing Storage Account to show how straightforward it is to work with a log file.  As it's sat in its native format in a Storage Account, all of the activities that you can perform with blobs are available to you.  This includes building an archive of your logs in a separate Storage Account by copying from one Storage Account to another for instance or simply downloading the blob using a SAS + URL.
- 
+![.log Blob](images/29_StorageAccountBlobDownload2.png?raw=true)
+
 <br>
 
-Please see below for a full view of the options available when working with logs:
+We took the approach of accessing the backing Storage Account to show how straightforward it is to work with a log file.  As it's sat in its native format in a Storage Account, all of the activities that you can perform with blobs are available to you.  This includes building an archive of your logs in a separate Storage Account by copying from one Storage Account to another or simply being able to 'publish' the blob using a SAS + URL.
+
+Note. Re. the point above about archiving, there is a retention policy that can be set natively under 'Diagnostics settings'.  A retention policy can be any number of days between 1 and 2147483647. Retention policies are applied per-day, so at the end of a day, logs from the day that is now beyond the retention policy will be deleted.
+
+<br>
+
+Please see below for a full view of the options available when working with diagnostics logs:
 
 ![Logs output](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/media/monitoring-overview-of-diagnostic-logs/diagnostics_logs_actions.png?raw=true)
 
-You can:
-- Save them to a Storage Account for auditing or manual inspection. You can specify the retention time (in days) using resource diagnostic settings
-- Stream them to Event Hubs for ingestion by a third-party service or custom analytics solution such as PowerBI
-- Analyse them with Log Analytics (which you'll be introduced to later)
+So, you can:
+* Save them to a Storage Account for auditing or manual inspection. You can specify the retention time (in days) using resource diagnostic settings
+* Stream them to Event Hubs for ingestion by a third-party service or custom analytics solution such as PowerBI
+* Analyse them with Log Analytics (which you'll be introduced to later)
 
 <br>
 
@@ -316,11 +336,15 @@ You can:
 
 Richard/James to demonstrate as this doesn't work when using the Cloud Shell.
 
+Commands:
+* PowerShell = `Get-AzureRmVMBootDiagnosticsData -ResourceGroupName "<rgname>" -Name "<vmname>" -Windows -LocalPath "<localdirectory>"`
+* CLI = `az vm boot-diagnostics get-boot-log -g <rgname> -n <vmname>`
+
 <br>
 
 ### Step 4 - Enable Guest-OS diagnostics logs
 
-Firsly, please navigate to your VM in the Azure Portal and enter the 'Diagnostics settings' blade.
+Firsly, navigate to your VM in the Azure Portal and enter the 'Diagnostics settings' blade.
 
 ![Diagnostics Settings](images/30_DiagnosticsSettingsNavigate.png?raw=true)
 
@@ -332,38 +356,37 @@ Now, turn on the Guest OS logging by clicking on 'Enable guest-level monitoring'
 
 <br>
 
-You should be presented with a page such as this:
+You should be presented with a page like this:
 
 ![Guest Monitoring](images/32_DiagnosticsSettingsOptions.png?raw=true)
 
 Here you can see all of the options available to you in respect to guest-level monitoring/logging.  This includes:
 
-- 'Configure performance counters'
--- This takes you to the 'Performance counters' tab to the right of the 'Overview' tab.
--- Here you will see a toggle switch for 'None', 'Basic', 'Custom'
---- 'None' = No counters, 'Basic' = A default list of counters with fixed sample rates inc. CPU, Memory, Disk, and Network, and 'Custom' = choose a counters based on any metric that's supported and set custom sample rates per-counter
-- 'Configure event logs'
--- This takes you to the 'Logs' tab to the right of the 'Performance counters' tab
--- This is similar to Performance Counters in that you have a choice of 'None', 'Basic', and 'Custom'.  Here you can select which types and levels of logs to collect
-- 'Configure directories'
--- This takes you to the 'Logs' tab to the right of the 'Performance counters' tab
--- This is in relation to choosing the IIS logs to collect and the log directories to monitor
-- 'Configure crash dumps'
--- This takes you to the 'Crash dumps' tab to the right of the 'Logs' tab
--- Here you have a toggle switch for collecting memory dumps when a particular process crashes.
-- 'Configure sinks'
--- This takes you to the 'Sinks' tab to the right of the 'Sinks' tab
--- This is how you configure whether to send diagnostics data to Application Insights or not to provide advanced analytics for apps running on this VM
-- 'Configure agent'
--- This takes you to the 'Agent' tab to the right of the 'Crash dumps' tab
--- Here you configure additional options for the Azure Diagnostics agent such as Log Level, the backing Storage Account to use, and the disk quote
-- 'View boot diagnostics' and 'Configure boot diagnostics'
--- This takes you to the settings of the VM that you're working with
--- This is the settings page that you have visited in a prior exercise.
+* 'Configure performance counters'
+  * This takes you to the 'Performance counters' tab to the right of the 'Overview' tab.
+  * Here you will see a toggle switch for 'None', 'Basic', 'Custom'.  'None' = No counters, 'Basic' = A default list of counters with fixed sample rates inc. CPU, Memory, Disk, and Network, and 'Custom' = choose a counters based on any metric that's supported and set custom sample rates per-counter
+*- 'Configure event logs'
+  * This takes you to the 'Logs' tab to the right of the 'Performance counters' tab
+  * This is similar to Performance Counters in that you have a choice of 'None', 'Basic', and 'Custom'.  Here you can select which types and levels of logs to collect
+* 'Configure directories'
+  * This takes you to the 'Logs' tab to the right of the 'Performance counters' tab
+  * This is in relation to choosing the IIS logs to collect and the log directories to monitor
+* 'Configure crash dumps'
+  * This takes you to the 'Crash dumps' tab to the right of the 'Logs' tab
+  * Here you have a toggle switch for collecting memory dumps when a particular process crashes.
+* 'Configure sinks'
+  * This takes you to the 'Sinks' tab to the right of the 'Sinks' tab
+  * This is how you configure whether to send diagnostics data to Application Insights or not to provide advanced analytics for apps running on this VM
+* 'Configure agent'
+  * This takes you to the 'Agent' tab to the right of the 'Crash dumps' tab
+  * Here you configure additional options for the Azure Diagnostics agent such as Log Level, the backing Storage Account to use (i.e. a different one to what's chosen/created), and the disk quota
+* 'View boot diagnostics' and 'Configure boot diagnostics'
+  * This takes you to the settings of the VM that you're working with
+  * This is the settings page that you have visited in a prior exercise.
 
 <br>
 
-Click on the 'Performance counters' tab or 'Configure performance counters'.
+Click on the 'Performance counters' tab or 'Configure performance counters' on the 'Overview' tab.
 
 Take a look.  What performance counters are on and what is the sample rate?
 
@@ -373,18 +396,9 @@ Take a look.  What performance counters are on and what is the sample rate?
 
 Now, click on the 'Logs' tab or 'Configure event logs' on the Overview tab.
 
-Here, we will change a setting.  Click the 'Audit success' event check box in the 'SECURITY' section and then click 'Save'.
+Here, we will change a couple of settings.  Click the 'Audit success' event check box in the 'SECURITY' section and the 'Information' event check box under 'SYSTEM' and then click 'Save'.
 
 ![Diagnostics Settings Logs](images/34_DiagnosticsSettingsChangeSecurityAuditSetting.png?raw=true)
-
-<br>
-
-The last thing we'll do in this step is...
-
-<br>
-
-### Step 5 - View Guest-OS diagnostics logs
-
 
 <br>
 
@@ -407,10 +421,14 @@ In this exercise you will spend a bit more time with Azure Monitor by starting t
 ### Step 1 - Navigate back to Azure Monitor using the same method as before and read the information below
 
 When you open the Azure Monitor page, you can select among the subscriptions that you have read access to.  For a selected subscription, you can see:
-- Triggered alerts and alert sources - This table shows summary counts, alert sources, and how many times alerts fired for the selected time duration. It applies to both metric and activity log alerts. <Edit: Alerts (Preview) with unified experience also shown for all alerts - events, metrics and logs
-- Activity Log Errors - If any of your Azure resources log events with error-level severity, you can view a high-level count and click through to the activity log page to investigate each event
-- Azure Service Health - You can see a count of Service Health service issues, planned maintenance events, and health advisories. Azure Service Health provides personalized information when problems in the Azure infrastructure impact your services
-- Application Insights - See KPIs for each AppInsights resource in the current subscription. The KPIs are optimised for server-side application monitoring across ASP.NET web apps, Java, Node, and General application types. The KPIs include metrics for request rate, response duration, failure rate, and availability %
+* Triggered alerts and alert sources
+  * This table shows summary counts, alert sources, and how many times alerts fired for the selected time duration. It applies to both metric and activity log alerts
+* Activity Log Errors
+  * If any of your Azure resources log events with error-level severity, you can view a high-level count and click through to the activity log page to investigate each event
+* Azure Service Health
+  * You can see a count of Service Health service issues, planned maintenance events, and health advisories.  Azure Service Health provides personalised information when problems in the Azure infrastructure impact your services
+* Application Insights
+  * See KPIs for each AppInsights resource in the current subscription.  The KPIs are optimised for server-side application monitoring across ASP.NET web apps, Java, Node, and General application types.  The KPIs include metrics for request rate, response duration, failure rate, and availability %
 
 If you have not on-boarded to Log Analytics or Application Insights, or if you have not configured any Azure Alerts in the current subscription, this page provides links to begin your on-boarding process.
 
@@ -456,7 +474,7 @@ When it comes to diagnostics logs, here's what you can do if you stream them int
 - Solutions - Use pre-built views and dashboards that give you immediate insight into your log data
 - Advanced analytics - Apply machine learning and pattern matching algorithms to identify possible issues revealed by your logs
 
-Due to some unpredictability in regard to the current state of your Log Analytics setup, Richard will lead an unscripted overview of this.
+Due to some unpredictability in regard to the current state of your Log Analytics setup, Richard/James will lead an unscripted overview of this.
 
 Here's a snapshot of what to expect however:
 
@@ -467,6 +485,12 @@ Here's a snapshot of what to expect however:
 ![Azure Monitor Log Analytics](images/39_AzureMonitorLogAnalyticsOpen.png?raw=true)
 
 <br>
+
+### Step 4 - Network Watcher
+
+
+
+<br><br>
 
 ## Exercise 5 - Gather information from Azure Advisor
 
@@ -490,20 +514,14 @@ Note. To use Azure Advisor with a subscription, a subscription Owner must launch
 
 <br>
 
-### Step 1 - Navigate to Azure Advisor
+Richard/James to demonstrate.
 
-
-
+<br><br>
 
 ## Exercise 6 - Explore App Insights and Security Center
 
 Application Insights offers application performance monitoring and user analytics.  It monitors the code that you've written and applications that you've deployed on Azure, on-premises, or other clouds.  By instrumenting your application with the Application Insights SDK you can get access to a range of data including response times of dependencies, exception traces, debugging snapshots, and execution profiles.  It provides powerful tools for analysing this application telemetry while developing and operating your application.  It deeply integrates with Visual Studio to enable you to get right to the problem line(s) of code so you can fix it, and offers usage analytics to analyse customer usage of your applications for product managers as well.
 
-In this exercise we will be...
+<br>
 
-
-## Exercise 10 - Leveraging Event Grid
-
-Event Grid helps you build reactive, event-driven apps with a fully managed event routing service.  You can create richer app scenarios by connecting serverless logic to events from multiple sources inc. Azure services.
-
-In this exercise we will be...
+Richard/James to demonstrate.
