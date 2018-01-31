@@ -4,6 +4,53 @@ This lab is focused on the operational aspects of working with Azure.  The subje
 
 <br><br>
 
+## What is it?
+
+This intro lab serves to guide you on the operational toolset that's available on Azure.  This includes:
+
+* Activity Logs
+* Alerts
+* Azure Monitor
+* Boot Diagnostics Logs
+* Guest OS Diagnostics Logs
+* Log Analytics
+* Network Watcher
+* Azure Advisor
+* App Insights
+* Security Center
+
+<br><br>
+
+## Preparing for this lab
+
+For this Lab you will require:
+
+* Access to an Azure Subscription
+* Access to Azure Portal using a web browser
+* Access to an e-mail account
+
+<br>
+
+Note.  When using the Azure CLI or PowerShell (inc. using Cloud Shell within the Portal), after logging in, if you have more than one subscripton you may need to set the subscription to perform actions against.
+
+To do this with Azure CLI:
+
+```
+az account set --subscription "<subnameorguid>"
+```
+
+To do this with PowerShell:
+
+```
+Get-AzureRmSubscription -SubscriptionName '<subname>'  | Select-AzureRmSubscription
+
+or
+
+Get-AzureRmSubscription -SubscriptionId '<subguid>'  | Select-AzureRmSubscription
+```
+
+<br><br>
+
 ## Exercise 1 - Inspect Azure Activity Logs
 
 In this exercise you will look at the Activity Log in Azure.  The Activity Log provides insight into the operations that have been performed on resources in your subscription using Resource Manager.  For example, creating a virtual machine or deleting a Public IP will show up in the Activity Log.
