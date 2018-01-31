@@ -454,13 +454,13 @@ For some services, you may need to turn on diagnostics in order to see any metri
 
 On the left-side menu of Azure Monitor click 'Metrics' and then filter down to your VM.
 
-![Azure Monitor Metrics](images/36_AzureMonitorMetrics.png?raw=true)
+![Azure Monitor Metrics](images/40_AzureMonitorMetrics.png?raw=true)
 
 <br>
 
 Let's take a look at then Read and Write activity on your VM's virtual OS disk.  Click the '[Guest] \LogicalDisk(_Total)\Disk Read/sec' and '[Guest] \LogicalDisk(_Total)\Disk Writes/sec' check boxes.
 
-![Azure Monitor Metrics Disk Reads and Writes](images/37_AzureMonitorDiskRRW.png?raw=true)
+![Azure Monitor Metrics Disk Reads and Writes](images/41_AzureMonitorDiskRRW.png?raw=true)
 
 <br>
 
@@ -482,11 +482,11 @@ Due to some unpredictability in regard to the current state of your Log Analytic
 
 Here's a snapshot of what to expect however:
 
-![Azure Monitor Log Analytics](images/38_AzureMonitorLogAnalytics.png?raw=true)
+![Azure Monitor Log Analytics](images/41_AzureMonitorLogAnalytics.png?raw=true)
 
 <br>
 
-![Azure Monitor Log Analytics](images/39_AzureMonitorLogAnalyticsOpen.png?raw=true)
+![Azure Monitor Log Analytics](images/42_AzureMonitorLogAnalyticsOpen.png?raw=true)
 
 <br>
 
@@ -521,14 +521,70 @@ Network Watcher currently has the following capabilities:
 
 The introduction to Network Watcher featured in this guide is related to the 'Topology' and 'Next hop' capabilities.
 
-Note. Some of the capabilities rely on a Network Watcher Agent Extension being installed on a given VM.
+Note. Some of the capabilities rely on a Network Watcher Agent Extension being installed on a given VM.  This is easily achieved at the VM resource level and can be automated using PowerShell and Azure CLI.
 
 <br>
 
 Navigate to the 'Network Watcher' blade:
 
+![Azure Monitor Network Watcher](images/47_AzureMonitorNetworkWatcherNavigate.png?raw=true)
 
+<br>
 
+The landing page should look like this:
+
+![Azure Monitor Network Watcher Expand Subscription](images/48_AzureMonitorNetworkWatcherMain.png?raw=true)
+
+You will see references to where Network Watcher has been enabled under each Subscription and for each Region.  This is the level at which Network Watcher is enabled.
+
+<br>
+
+You now need to enable Network Watcher for the Region that your VM is deployed in and under the same Subscription (as that's where you have permission to do rather than it being a requirement that they're the same).  The process looks like this:
+
+![Azure Monitor Network Watcher Enable](images/49_AzureMonitorNetworkWatcherExpand.png?raw=true)
+
+<br>
+
+Wait until you see a notification that tells you that the Region is enabled for Network Watcher.  After that has appeared, click on 'Topology'.  We will take a look at what that does...
+
+![Azure Monitor Network Watcher Topology](images/50_AzureMonitorNetworkWatcherTopologyNavigateTopology.png?raw=true)
+
+<br>
+
+The topology function doesn't rely on the VM agent extension.  It simply generates a topology drawing based on 3 inputs that you provide.
+
+Those inputs are:
+1. Subscription
+2. Resource Group
+3. Virtual Network
+
+<br>
+
+Let's now do that.  Use the three drop-down menus to select your Subscription, the Resource Group that your VM resides in, and then the Virtual Network that the Network Interface that's attached to your VM resides in.  A diagram will be generated and displayed as soon as the last input is provided.  It should look something like this:
+
+![Azure Monitor Network Watcher Topology Diagram](images/51_AzureMonitorNetworkWatcherTopology.png?raw=true)
+
+Handy, eh?  Each diagram that's generated can be downloaded in .svg format and then stored in a repository.
+
+<br>
+
+Right, that's the Topology function.  Now, we'll take a look at the 'Next Hop' function.  Start by navigating back to the main Network Watcher blade page.
+
+![Azure Monitor Network Watcher Navigate Back](images/52_AzureMonitorNetworkWatcherNavigateBack.png?raw=true)
+
+<br>
+
+Click 'Next Hop'.  Some of the inputs may actually already be what you want them to be but, if not, please go through the 'Subscription', 'Resource group', 'Virtual machine', 'Network interface', and 'Source IP address' inputs in that order.  Each step should go 'down a level' to get to the IP address of the VM that you're working with.
+
+Lastly, choose a destination IP address and click 'Next hop'.  I have chosen Google's first DNS Service endpoint (8.8.8.8 with the second being 8.8.4.4).  This should route via *Internet* because I haven't applied any UDR to the Subnet that will cause a different forwarding policy to the default.
+
+Here's my output:
+
+![Azure Monitor Network Watcher Next Hop Route](images/54_AzureMonitorNetworkWatcherNextHopRoute.png?raw=true)
+
+<br>
+
+#### END OF EXERCISE 4
 
 <br><br>
 
@@ -558,7 +614,7 @@ Richard/James to demonstrate.
 
 <br><br>
 
-## Exercise 6 - Explore App Insights and Security Center
+## Exercise 6 - Explore App Insights
 
 Application Insights offers application performance monitoring and user analytics.  It monitors the code that you've written and applications that you've deployed on Azure, on-premises, or other clouds.  By instrumenting your application with the Application Insights SDK you can get access to a range of data including response times of dependencies, exception traces, debugging snapshots, and execution profiles.  It provides powerful tools for analysing this application telemetry while developing and operating your application.  It deeply integrates with Visual Studio to enable you to get right to the problem line(s) of code so you can fix it, and offers usage analytics to analyse customer usage of your applications for product managers as well.
 
