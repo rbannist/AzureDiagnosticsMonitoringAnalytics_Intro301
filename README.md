@@ -482,11 +482,11 @@ Due to some unpredictability in regard to the current state of your Log Analytic
 
 Here's a snapshot of what to expect however:
 
-![Azure Monitor Log Analytics](images/41_AzureMonitorLogAnalytics.png?raw=true)
+![Azure Monitor Log Analytics](images/42_AzureMonitorLogAnalytics.png?raw=true)
 
 <br>
 
-![Azure Monitor Log Analytics](images/42_AzureMonitorLogAnalyticsOpen.png?raw=true)
+![Azure Monitor Log Analytics](images/43_AzureMonitorLogAnalyticsOpen.png?raw=true)
 
 <br>
 
