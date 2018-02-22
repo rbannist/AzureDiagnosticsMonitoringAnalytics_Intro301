@@ -8,16 +8,16 @@ This lab is focused on the operational aspects of working with Azure.  The subje
 
 This intro lab serves to guide you on the operational toolset that's available on Azure.  This includes:
 
-* Activity Logs
-* Alerts
-* Azure Monitor
-* Boot Diagnostics Logs
-* Guest OS Diagnostics Logs
-* Log Analytics
-* Network Watcher
-* Azure Advisor
-* App Insights
-* Security Center
+* Activity Logs.
+* Alerts.
+* Azure Monitor.
+* Boot Diagnostics Logs.
+* Guest OS Diagnostics Logs.
+* Log Analytics.
+* Network Watcher.
+* Azure Advisor.
+* App Insights.
+* Security Center.
 
 <br><br>
 
@@ -25,13 +25,15 @@ This intro lab serves to guide you on the operational toolset that's available o
 
 For this Lab you will require:
 
-* Access to an Azure Subscription
-* Access to Azure Portal using a web browser
-* Access to an e-mail account
+* Access to an Azure Subscription.
+* Access to Azure Portal using a web browser.
+* Access to an e-mail account.
 
 <br>
 
-Note.  When using the Azure CLI or PowerShell (inc. using Cloud Shell within the Portal), after logging in, if you have more than one subscripton you may need to set the subscription to perform actions against.
+Note.  When using the Azure CLI or PowerShell (inc. using Cloud Shell within the Portal), after logging in, if you have more than one subscripton, you may need to set the subscription to perform actions against.
+
+<br>
 
 To do this with Azure CLI:
 
@@ -39,13 +41,17 @@ To do this with Azure CLI:
 az account set --subscription "<subnameorguid>"
 ```
 
+<br>
+
 To do this with PowerShell:
 
 ```
 Get-AzureRmSubscription -SubscriptionName '<subname>'  | Select-AzureRmSubscription
+```
 
 or
 
+```
 Get-AzureRmSubscription -SubscriptionId '<subguid>'  | Select-AzureRmSubscription
 ```
 
@@ -55,7 +61,7 @@ Get-AzureRmSubscription -SubscriptionId '<subguid>'  | Select-AzureRmSubscriptio
 
 In this exercise you will look at the Activity Log in Azure.  The Activity Log provides insight into the operations that have been performed on resources in your subscription using Resource Manager.  For example, creating a virtual machine or deleting a Public IP will show up in the Activity Log.
 
-Activity logs have a 19-day data retention period.
+Activity logs have a 19-day data retention period.  For general information on Activity Logs [click here](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitoring-overview-activity-logs) and [click here](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitoring-overview-activity-logs#export-the-activity-log-with-a-log-profile) if you wish to understand how to store logs for more than 19 days.
 
 You created a Virtual Machine in a previous lab so there should be logs related to the creation of a Virtual Machine resource and other supporting resources such as a Network Interface, a Storage Account, an OS disk, etc. in your Activity Log.  So, let's take a look at your Activity Log entries related to the resources created during that lab.
 
@@ -91,15 +97,25 @@ As an example of gathering information from the log entries, I have expanded an 
 
 <br>
 
-You can fit Activity Logs in with integration scenarios such as:
+Activity Logs can fit in with integration scenarios such as:
 
-* Create an email or webhook alert that triggers off an Activity Log event
-* Stream into an Event Hub for ingestion by a third-party service or custom analytics solution such as PowerBI
-* Analyse in PowerBI using the PowerBI content pack
-* Save to a Storage Account for archival or manual inspection. You can specify the retention time (in days) using Log Profiles
-* Query and view in the Azure portal
-* Query via PowerShell Cmdlet, CLI, or REST API
-* Export the Activity Log with Log Profiles to log Analytics
+* Create an email or webhook alert that triggers off an Activity Log event.
+* Stream into an Event Hub for ingestion by a third-party service or custom analytics solution such as PowerBI.
+* Analyse in PowerBI using the PowerBI content pack.
+* Save to a Storage Account for archival or manual inspection. You can specify the retention time (in days) using Log Profiles.
+* Query and view in the Azure portal.
+* Query via PowerShell Cmdlet, CLI, or REST API.
+* Export the Activity Log with Log Profiles to log Analytics.
+
+<br>
+
+![](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/media/monitoring-overview-activity-logs/activity_log_overview_v3.png)
+
+<br>
+
+Here's an example of the Power BI [Azure Audit Logs Content Pack](https://docs.microsoft.com/en-us/power-bi/service-connect-to-azure-audit-logs) that takes only a few minutes to get setup against a subscription:
+
+![Power BI Azure Audit Logs Content Pack](images/PowerBIAuditLogsContentPack.png?raw=true)
 
 <br><br>
 
@@ -118,8 +134,8 @@ You can configure and get information about alert rules using Azure Portal, Powe
 This guide shows the use of Azure Portal.
 
 There are two ways to trigger an alert in Azure:
-- Metric values - The alert triggers when the value of a specified metric crosses a threshold you assign in either direction
-- Activity log events - An alert can trigger on every event, or, only when certain events occurs
+- Metric values - The alert triggers when the value of a specified metric crosses a threshold that you assign in either direction.
+- Activity log events - An alert can trigger on every event, or, only when certain events occurs.
 
 You will setup a simple Activity log alert.
 
@@ -135,18 +151,18 @@ Click 'Add activity log alert' on the page that you're currently on.
 
 Now, add names and change the settings:
 
-1. Choose the resource group that you setup for VM creation earlier rather than creating a new 'Default' one for action group association (this helps with clearing up later + keeping environments separate)
-2. Limit the 'Resource type' to 'Network Interfaces (Microsoft.Network/networkinterfaces)'
-3. As the alert is limited to the logged-in user by default, we'll expand both the 'Resource Group' and 'Resource' in scope to 'All' in order to capture any event of this type performed by you-alone
-4. Change the 'Operation name' value to 'Create or Update Network Interface (networkinterfaces)'
-5. Choose 'Informational' under the 'Level' drop-down menu
-6. Create a new Action Group by adding an appropriate name and a short name
-7. Add an action
+1. Choose the resource group that you setup for VM creation earlier rather than creating a new 'Default' one for action group association (this helps with clearing up later + keeping environments separate).
+2. Limit the 'Resource type' to 'Network Interfaces (Microsoft.Network/networkinterfaces)'.
+3. As the alert is limited to the logged-in user by default, we'll expand both the 'Resource Group' and 'Resource' in scope to 'All' in order to capture any event of this type performed by you-alone.
+4. Change the 'Operation name' value to 'Create or Update Network Interface (networkinterfaces)'.
+5. Choose 'Informational' under the 'Level' drop-down menu.
+6. Create a new Action Group by adding an appropriate name and a short name.
+7. Add an action.
 
 Re. actions, amongst a few options, you can configure a metric alert to do the following:
-* Send email notifications
-* Call a webhook (e.g. a Logic App or Function HTTP trigger)
-* Start execution of an Azure Automation runbook
+* Send email notifications.
+* Call a webhook (e.g. a Logic App or Function HTTP trigger).
+* Start execution of an Azure Automation runbook.
 
 Here is the full list of action options as of 01/18:
 
@@ -224,13 +240,13 @@ You have now configured an Alert and verified that it's being triggered under th
 
 <br>
 
-### Step 4 - An introduction to Azure Monitor
+### Step 4 - A quick introduction to Azure Monitor (more to follow later)
 
 So far, you have worked with the Acitivity Log and Alerts.  Many of the operational tools available in Azure have now been consolidated into one place.  The consolidated view is provided by Azure Monitor.  Azure Monitor provides base-level infrastructure metrics and logs for most services in Microsoft Azure.
 
 It has a landing page that helps you:
-* Understand the monitoring capabilities offered by Azure
-* Discover, configure, and on-board Azure’s platform and premium monitoring capabilities
+* Understand the monitoring capabilities offered by Azure.
+* Discover, configure, and on-board Azure’s platform and premium monitoring capabilities.
 
 While the Azure Monitor service is released, the landing overview page is in preview.
 
@@ -266,19 +282,19 @@ Click into the 'Activity Log' and 'Alerts' pages... look familiar?
 
 VM Boot Diagnostics logs and Guest OS-level Diagnostics Logs fall under 'Event Management' from an ITIL viewpoint and visibility of these logs can aid efforts related to maintaining the health of IT services.
 
-VM Boot Diagnostics logs are Resource-level diagnostics logs.  Azure resource-level diagnostic logs are logs emitted by a resource.  The content of these logs varies by resource type.  Resource-level diagnostic logs provide insight into operations that were performed within that resource itself.  For example, getting a secret from a Key Vault would be logged in a Resource-level log.
+VM Boot Diagnostics logs are resource-level diagnostics logs.  Azure resource-level diagnostic logs are logs emitted by a resource.  The content of these logs varies by resource type.  Resource-level diagnostic logs provide insight into operations that were performed within that resource itself.  For example, an event such as getting a secret from a Key Vault will be logged in a resource-level log.
 
-Guest OS-level diagnostic logs differ from Resource-level diagnostics logs. Guest OS diagnostic logs are those collected by an agent running inside of a virtual machine or other supported resource type.  Resource-level diagnostic logs require no agent and capture resource-specific data from the Azure platform itself, while guest OS-level diagnostic logs capture data from the operating system and applications running on a virtual machine.
+Guest OS-level diagnostic logs differ from resource-level diagnostics logs. Guest OS diagnostic logs are those collected by an agent running inside of a virtual machine or other supported resource type.  Resource-level diagnostic logs require no agent and capture resource-specific data from the Azure platform itself while guest OS-level diagnostic logs capture data from the operating system and applications running on a virtual machine.
 
 The Azure diagnostics extension is needed (Windows or Linux) to collect most application level metrics and logs. The types include:
-* Performance counters
-* Application Logs
-* Windows Event Logs
-* .NET Event Source
-* IIS Logs
-* Manifest based ETW
-* Crash Dumps
-* Customer Error Logs
+* Performance counters.
+* Application Logs.
+* Windows Event Logs.
+* .NET Event Source.
+* IIS Logs.
+* Manifest based ETW.
+* Crash Dumps.
+* Customer Error Logs.
 
 Without the diagnostics extension, only a few metrics - like CPU usage - are available.
 
@@ -373,9 +389,9 @@ Please see below for a full view of the options available when working with diag
 ![Logs output](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/media/monitoring-overview-of-diagnostic-logs/diagnostics_logs_actions.png?raw=true)
 
 So, you can:
-* Save them to a Storage Account for auditing or manual inspection. You can specify the retention time (in days) using resource diagnostic settings
-* Stream them to Event Hubs for ingestion by a third-party service or custom analytics solution such as PowerBI
-* Analyse them with Log Analytics (which you'll be introduced to later)
+* Save them to a Storage Account for auditing or manual inspection. You can specify the retention time (in days) using resource diagnostic settings.
+* Stream them to Event Hubs for ingestion by a third-party service or custom analytics solution such as PowerBI.
+* Analyse them with Log Analytics (which you'll be introduced to later).
 
 <br>
 
@@ -383,9 +399,19 @@ So, you can:
 
 Richard/James to demonstrate as this doesn't work when using the Cloud Shell.
 
-Commands:
-* PowerShell = `Get-AzureRmVMBootDiagnosticsData -ResourceGroupName "<rgname>" -Name "<vmname>" -Windows -LocalPath "<localdirectory>"`
-* CLI = `az vm boot-diagnostics get-boot-log -g <rgname> -n <vmname>`
+CLI:
+
+```
+az vm boot-diagnostics get-boot-log -g <rgname> -n <vmname>
+```
+
+<br>
+
+PowerShell:
+
+```
+Get-AzureRmVMBootDiagnosticsData -ResourceGroupName "<rgname>" -Name "<vmname>" -Windows -LocalPath "<localdirectory>"
+```
 
 <br>
 
@@ -411,24 +437,24 @@ Here you can see all of the options available to you in respect to guest-level m
 
 * 'Configure performance counters'
   * This takes you to the 'Performance counters' tab to the right of the 'Overview' tab.
-  * Here you will see a toggle switch for 'None', 'Basic', 'Custom'.  'None' = No counters, 'Basic' = A default list of counters with fixed sample rates inc. CPU, Memory, Disk, and Network, and 'Custom' = choose a counters based on any metric that's supported and set custom sample rates per-counter
+  * Here you will see a toggle switch for 'None', 'Basic', 'Custom'.  'None' = No counters, 'Basic' = A default list of counters with fixed sample rates inc. CPU, Memory, Disk, and Network, and 'Custom' = choose a counters based on any metric that's supported and set custom sample rates per-counter.
 * 'Configure event logs'
-  * This takes you to the 'Logs' tab to the right of the 'Performance counters' tab
-  * This is similar to Performance Counters in that you have a choice of 'None', 'Basic', and 'Custom'.  Here you can select which types and levels of logs to collect
+  * This takes you to the 'Logs' tab to the right of the 'Performance counters' tab.
+  * This is similar to Performance Counters in that you have a choice of 'None', 'Basic', and 'Custom'.  Here you can select which types and levels of logs to collect.
 * 'Configure directories'
-  * This takes you to the 'Logs' tab to the right of the 'Performance counters' tab
-  * This is in relation to choosing the IIS logs to collect and the log directories to monitor
+  * This takes you to the 'Logs' tab to the right of the 'Performance counters' tab.
+  * This is in relation to choosing the IIS logs to collect and the log directories to monitor.
 * 'Configure crash dumps'
-  * This takes you to the 'Crash dumps' tab to the right of the 'Logs' tab
+  * This takes you to the 'Crash dumps' tab to the right of the 'Logs' tab.
   * Here you have a toggle switch for collecting memory dumps when a particular process crashes.
 * 'Configure sinks'
-  * This takes you to the 'Sinks' tab to the right of the 'Sinks' tab
-  * This is how you configure whether to send diagnostics data to Application Insights or not to provide advanced analytics for apps running on this VM
+  * This takes you to the 'Sinks' tab to the right of the 'Sinks' tab.
+  * This is how you configure whether to send diagnostics data to Application Insights or not to provide advanced analytics for apps running on this VM.
 * 'Configure agent'
-  * This takes you to the 'Agent' tab to the right of the 'Crash dumps' tab
-  * Here you configure additional options for the Azure Diagnostics agent such as Log Level, the backing Storage Account to use (i.e. a different one to what's chosen/created), and the disk quota
+  * This takes you to the 'Agent' tab to the right of the 'Crash dumps' tab.
+  * Here you configure additional options for the Azure Diagnostics agent such as Log Level, the backing Storage Account to use (i.e. a different one to what's chosen/created), and the disk quota.
 * 'View boot diagnostics' and 'Configure boot diagnostics'
-  * This takes you to the settings of the VM that you're working with
+  * This takes you to the settings of the VM that you're working with.
   * This is the settings page that you have visited in a prior exercise.
 
 <br>
@@ -473,13 +499,13 @@ In this exercise you will spend a bit more time with Azure Monitor by starting t
 
 When you open the Azure Monitor page, you can select among the subscriptions that you have read access to.  For a selected subscription, you can see:
 * Triggered alerts and alert sources
-  * This table shows summary counts, alert sources, and how many times alerts fired for the selected time duration. It applies to both metric and activity log alerts
+  * This table shows summary counts, alert sources, and how many times alerts fired for the selected time duration. It applies to both metric and activity log alerts.
 * Activity Log Errors
-  * If any of your Azure resources log events with error-level severity, you can view a high-level count and click through to the activity log page to investigate each event
+  * If any of your Azure resources log events with error-level severity, you can view a high-level count and click through to the activity log page to investigate each event.
 * Azure Service Health
   * You can see a count of Service Health service issues, planned maintenance events, and health advisories.  Azure Service Health provides personalised information when problems in the Azure infrastructure impact your services
-* Application Insights
-  * See KPIs for each AppInsights resource in the current subscription.  The KPIs are optimised for server-side application monitoring across ASP.NET web apps, Java, Node, and General application types.  The KPIs include metrics for request rate, response duration, failure rate, and availability %
+* Application Insights.
+  * See KPIs for each AppInsights resource in the current subscription.  The KPIs are optimised for server-side application monitoring across ASP.NET web apps, Java, Node, and General application types.  The KPIs include metrics for request rate, response duration, failure rate, and availability %.
 
 If you have not on-boarded to Log Analytics or Application Insights, or if you have not configured any Azure Alerts in the current subscription, this page provides links to begin your on-boarding process.
 
@@ -505,7 +531,7 @@ On the left-side menu of Azure Monitor click 'Metrics' and then filter down to y
 
 <br>
 
-Let's take a look at then Read and Write activity on your VM's virtual OS disk.  Click the '[Guest] \LogicalDisk(_Total)\Disk Read/sec' and '[Guest] \LogicalDisk(_Total)\Disk Writes/sec' check boxes.
+Let's take a look at the Read and Write activity on your VM's virtual OS disk.  Click the '[Guest] \LogicalDisk(_Total)\Disk Read/sec' and '[Guest] \LogicalDisk(_Total)\Disk Writes/sec' check boxes.
 
 ![Azure Monitor Metrics Disk Reads and Writes](images/41_AzureMonitorDiskRRW.png?raw=true)
 
@@ -520,10 +546,10 @@ This is the type of information that is very useful when dealing with Investigat
 Log Analytics (formerly known as/aka OMS Log Analytics) is an Azure service that ingests log and metric data from Azure services (via Azure Monitor), Azure VMs, and on-premises or other cloud infrastructure and offers flexible log search and out-of-the box analytics on top of this data.  It provides rich tools to analyse data across sources, allows complex queries across all logs, and can proactively alert on specified conditions.  You can even collect custom data into its central repository so you can query and visualise it.  You can also take advantage of Log Analytic's built-in solutions to immediately gain insights into the security and functionality of your infrastructure.
 
 When it comes to diagnostics logs, here's what you can do if you stream them into Log Analytics:
-- Log search - Write advanced queries over your log data, correlate logs from various sources, and even generate charts that can be pinned to your Azure dashboard
-- Alerting - Detect when one or more events match a particular query and become notified with an email or webhook call
-- Solutions - Use pre-built views and dashboards that give you immediate insight into your log data
-- Advanced analytics - Apply machine learning and pattern matching algorithms to identify possible issues revealed by your logs
+- Log search - Write advanced queries over your log data, correlate logs from various sources, and even generate charts that can be pinned to your Azure dashboard.
+- Alerting - Detect when one or more events match a particular query and become notified with an email or webhook call.
+- Solutions - Use pre-built views and dashboards that give you immediate insight into your log data.
+- Advanced analytics - Apply machine learning and pattern matching algorithms to identify possible issues revealed by your logs.
 
 Due to some unpredictability in regard to the current state of your Log Analytics setup, Richard/James will lead an unscripted overview of this.
 
@@ -544,25 +570,25 @@ Network Watcher is a regional service that adds diagnostic and visualisation too
 Network Watcher currently has the following capabilities:
 
 * Topology
-  * Provides a network level view showing the various interconnections and associations between network resources in a resource group
+  * Provides a network level view showing the various interconnections and associations between network resources in a resource group.
 * Variable Packet capture
-  * Captures packet data in and out of a virtual machine.  The packet data can be stored in a blob store or on the local disk in .cap format
+  * Captures packet data in and out of a virtual machine.  The packet data can be stored in a blob store or on the local disk in .cap format.
 * IP flow verify
-  * Checks if a packet is allowed or denied based on flow information 5-tuple packet parameters (Destination IP, Source IP, Destination Port, Source Port, and Protocol)
+  * Checks if a packet is allowed or denied based on flow information 5-tuple packet parameters (Destination IP, Source IP, Destination Port, Source Port, and Protocol).
 * Next hop
-  * Determines the next hop for packets being routed in the Azure Network Fabric
+  * Determines the next hop for packets being routed in the Azure Network Fabric.
 * Security group view
-  * Gets the effective and applied security rules that are applied on a VM
+  * Gets the effective and applied security rules that are applied on a VM.
 * NSG Flow logging
-  * Flow logs for Network Security Groups enable you to capture logs related to traffic that are allowed or denied by the security rules in the group
+  * Flow logs for Network Security Groups enable you to capture logs related to traffic that are allowed or denied by the security rules in the group.
 * Virtual Network Gateway and Connection troubleshooting
-  * Provides the ability to troubleshoot Virtual Network Gateways and Connections
+  * Provides the ability to troubleshoot Virtual Network Gateways and Connections.
 * Network subscription limits
-  * View your network resource usage against limits
+  * View your network resource usage against limits.
 * Configuring Diagnostics Log
-  * A single pane to enable or disable Diagnostics logs for network resources in a resource group
+  * A single pane to enable or disable Diagnostics logs for network resources in a resource group.
 * Connectivity (Preview)
-  * Verifies the possibility of establishing a direct TCP connection from a virtual machine to a given endpoint
+  * Verifies the possibility of establishing a direct TCP connection from a virtual machine to a given endpoint.
 
 <br>
 
@@ -586,7 +612,7 @@ You will see references to where Network Watcher has been enabled under each Sub
 
 <br>
 
-You now need to enable Network Watcher for the Region that your VM is deployed in and under the same Subscription (as that's where you have permission to do rather than it being a requirement that they're the same).  The process looks like this:
+You now need to enable Network Watcher for the Region that your VM is deployed in and under the same Subscription (in the same Subscription because that's where you have permission to do so rather than it being a requirement that they're the same).  The process looks like this:
 
 ![Azure Monitor Network Watcher Enable](images/49_AzureMonitorNetworkWatcherExpand.png?raw=true)
 
@@ -601,9 +627,9 @@ Wait until you see a notification that tells you that the Region is enabled for 
 The topology function doesn't rely on the VM agent extension.  It simply generates a topology drawing based on 3 inputs that you provide.
 
 Those inputs are:
-1. Subscription
-2. Resource Group
-3. Virtual Network
+1. Subscription.
+2. Resource Group.
+3. Virtual Network.
 
 <br>
 
@@ -621,13 +647,70 @@ Right, that's the Topology function.  Now, we'll take a look at the 'Next Hop' f
 
 <br>
 
-Click 'Next Hop'.  Some of the inputs may actually already be what you want them to be but, if not, please go through the 'Subscription', 'Resource group', 'Virtual machine', 'Network interface', and 'Source IP address' inputs in that order.  Each step should go 'down a level' to get to the IP address of the VM that you're working with.
+Click 'Next Hop'.  Some of the inputs may actually already be what you want them to be but, if not, please go through the 'Subscription', 'Resource group', 'Virtual machine', 'Network interface', and 'Source IP address' inputs in that order.  Each step should go *down a level* to get to the IP address of the VM that you're working with.
 
 Lastly, choose a destination IP address and click 'Next hop'.  I have chosen Google's first DNS Service endpoint (8.8.8.8 with the second being 8.8.4.4).  This should route via *Internet* because I haven't applied any UDR to the Subnet that will cause a different forwarding policy to the default.
 
 Here's my output:
 
 ![Azure Monitor Network Watcher Next Hop Route](images/54_AzureMonitorNetworkWatcherNextHopRoute.png?raw=true)
+
+<br>
+
+### Step 5 - Service Health and Service Health Alerts
+
+The last thing that we'll take a look at in this exercise is 'Service Health'.  Service Health provides a personalised service health dashboard in the Azure portal.
+
+The service issues view shows any ongoing issues in Azure services that are impacting your resources and you can get the most recent update to understand what Azure is doing to resolve the issue.
+
+There is a link for each issue to use in your problem management system and a downloadable PDF summary of the issue to share with people who don’t have access to the Azure portal.  There is also a list of your resources that might be impacted by this issue in the 'potential impact' tab along with an export action to download the list.
+
+Planned maintenance and health advisories views are available.
+
+Alerts can be configured and we'll be creating one in a moment.  They can be focused on:
+
+* The class of service health notification (Service issues, Planned maintenance, Health advisories).
+* The subscription affected.
+* The service(s) affected.
+* The region(s) affected.
+
+<br>
+
+Let's now explore Service Health and Service Health Alerts... navigate there by clicking on the 'Service Health' link within Azure Monitor:
+
+![Azure Monitor Service Health](images/54_1_ServiceHealthNavigate.png?raw=true)
+
+<br>
+
+You should be presented with a page like this:
+
+![Azure Monitor Service Health](images/54_2_ServiceHealth.png?raw=true)
+
+<br>
+
+Now, whether there are any issues or not at the time of you following this guide is [obviously] completely variable.  If none are listed, you can expand the list of Regions in scope by clicking on the drop-down and then select 'Select All' to expand the scope.  In my case, there was one issue at the time of writing:
+
+![Azure Monitor Service Health](images/54_3_ServiceHealth2.png?raw=true)
+
+Take a look at the information presented in the image above or browse around a live entry if you find one.
+
+<br>
+
+We will now be *proactive* by creating an alert.  The alert can be based on any criteria - related to Azure service health - that you can think of.  This guide will focus on an example based on being alerted if anything goes wrong with Azure Active Directory in relation to the North Europe and West Europe Regions.  Click on 'Create service health alert':
+
+![Azure Monitor Service Health Alert](images/54_4_ServiceHealthAlert1.png?raw=true)
+
+<br>
+
+Give the alert a name and move down to the 'Service' drop-down.  Explore the options and then select only the 'Azure Active Directory' checkbox:
+
+![Azure Monitor Service Health Alert](images/54_5_ServiceHealthAlert2.png?raw=true)
+
+<br>
+
+
+
+![Azure Monitor Service Health Alert](images/54_5_ServiceHealthAlert2.png?raw=true)
 
 <br>
 
@@ -641,9 +724,9 @@ Azure Advisor is a personalised cloud consultant that helps you follow best prac
 
 With Advisor, you can:
 
-- Get proactive, actionable, and personalised best practices recommendations
-- Improve the performance, security, and high availability of your resources, as you identify opportunities to reduce your overall Azure spend
-- Get recommendations with proposed actions inline
+- Get proactive, actionable, and personalised best practices recommendations.
+- Improve the performance, security, and high availability of your resources, as you identify opportunities to reduce your overall Azure spend.
+- Get recommendations with proposed actions inline.
 
 The Advisor dashboard displays personalised recommendations for all your subscriptions. You can apply filters to display recommendations for specific subscriptions and resource types.  The recommendations are divided into four categories:
 - High Availability: To ensure and improve the continuity of your business-critical applications
@@ -653,11 +736,37 @@ The Advisor dashboard displays personalised recommendations for all your subscri
 
 In this exercise you will be viewing high availability and security-related recommendations related to your VM.
 
-Note. To use Azure Advisor with a subscription, a subscription Owner must launch the Advisor dashboard.  This action registers the subscription with Advisor.  From that point on, any subscription Owner, Contributor, or Reader can access the Advisor recommendations for the subscription.  The recommendations can sometimes take some time to populate.  If we find that is taking too long then Richard will share his screen.
+Note. To use Azure Advisor with a subscription, a subscription Owner must launch the Advisor dashboard.  This action registers the subscription with Advisor.  From that point on, any subscription Owner, Contributor, or Reader can access the Advisor recommendations for the subscription.  The recommendations can sometimes take some time to populate.  If you find that is taking too long then Richard or James will share their screen here.
 
 <br>
 
-Richard/James to demonstrate.
+### Step 1 - Browse to Azure Advisor
+
+Click 'All services' in the top left corner of your browser window, scroll down to the 'MONITORING + MANAGEMENT' section, and select Activity Log.
+
+![Visit the Activity Log](images/55_AdvisorVisit.png?raw=true)
+
+<br>
+
+![Visit the Activity Log 2](images/56_AdvisorVisit2.png?raw=true)
+
+<br>
+
+### Step 2 - Limit the view to the Subscription that you've been working with/in
+
+![Subscription View](images/57_AdvisorFilterSubscription.png?raw=true)
+
+<br>
+
+![Subscription View](images/58_AdvisorFilterSubscription2?raw=true)
+
+<br>
+
+### Step 3 - High Availability recommendations
+
+
+
+![Subscription View](images/57_AdvisorFilterSubscription.png?raw=true)
 
 <br><br>
 
