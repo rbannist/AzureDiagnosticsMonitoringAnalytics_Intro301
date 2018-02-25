@@ -69,7 +69,7 @@ You created a Virtual Machine in a previous lab so there should be logs related 
 
 ### Step 1 - Browse to the Activity Log screen
 
-Click 'All services' in the top left corner of your browser window, scroll down to the 'MONITORING + MANAGEMENT' section, and select Activity Log.
+Click 'All services' in the top left corner of your browser window, scroll down to the 'MONITORING + MANAGEMENT' section, and select 'Activity Log'.
 
 ![Visit the Activity Log](images/1_ActivityLogVisit.png?raw=true)
 
@@ -97,6 +97,10 @@ As an example of gathering information from the log entries, I have expanded an 
 
 <br>
 
+Take time to browse around Activity Logs and get familiar with the layout and what information is at hand.
+
+<br>
+
 Activity Logs can fit in with integration scenarios such as:
 
 * Create an email or webhook alert that triggers off an Activity Log event.
@@ -121,7 +125,7 @@ Here's an example of the Power BI [Azure Audit Logs Content Pack](https://docs.m
 
 #### END OF EXERCISE 1
 
-Stay where you are within the Azure Portal because in the next exercise you will be configuring an Activity Log Alert which addresses the first bullet point above.
+Return to the 'Write NetworkInterfaces' entry under 'Write VirtualMachines' that you visited a moment ago within the Azure Portal because in the next exercise you will be configuring an Activity Log Alert that addresses the first *scenarios* bullet point above.
 
 <br><br>
 
@@ -218,13 +222,13 @@ Start by navigating to the Resource Group that the VM resides in and then click 
 
 <br>
 
-Then click on 'IP configurations' followed by 'ipconfig1'.
+Click on 'IP configurations' followed by 'ipconfig1':
 
 ![VM NIC IPConfig](images/14_AlertsVMNICIPConfig.png?raw=true)
 
 <br>
 
-Lastly, click on 'Static' on the toggle switch under 'Private IP address settings' - 'Assignment' followed by 'Save' (ensuring that the IP address is present/remains the same).
+Lastly, click 'Static' on the toggle switch under 'Private IP address settings' - 'Assignment' followed by 'Save' (ensuring that the IP address is present/remains the same).
 
 ![VM NIC IPConfig Static](images/15_AlertsVMNICIPConfigStatic.png?raw=true)
 
@@ -336,7 +340,7 @@ However, this guide is going to take you to have a look around the backing Stora
 
 ### Step 3 - Download the Serial log
 
-Navigate to Storage Accounts:
+Navigate to 'Storage Accounts':
 
 ![All Storage Accounts](images/24_StorageAccounts.png?raw=true)
 
@@ -354,7 +358,7 @@ Enter the Storage Account's Blobs Service:
 
 <br>
 
-Here you will see a container that is holding your VM's diagnostics log and screenshot image - click it:
+Here you will see a container that is holding your VM's diagnostics log and screenshot image.  Click it:
 
 ![Enter Diagnostics Storage Account Blobs Container](images/27_StorageAccountBlobContainer.png?raw=true)
 
@@ -423,7 +427,7 @@ Firsly, navigate to your VM in the Azure Portal and enter the 'Diagnostics setti
 
 <br>
 
-Now, turn on the Guest OS logging by clicking on 'Enable guest-level monitoring' then and wait until the notification that tells you that the action is complete.
+Now, turn on the Guest OS logging by clicking on 'Enable guest-level monitoring' and wait until the notification that tells you that the action is complete.
 
 ![Guest Monitoring On](images/31_DiagnosticsSettingsOn.png?raw=true)
 
@@ -485,7 +489,7 @@ Guest-OS level monitoring is now turned on for your VM.
 
 ## Exercise 4 - Gather information from Azure Monitor - Metrics, Log Analytics, Service Health, App Insights, and Network Watcher
 
-As previously mentioned, Azure Monitor operates as a consolidated pipeline for all monitoring data from Azure services.  It gives you access to performance metrics and events that describe the operation of the Azure infrastructure and any Azure services you are using.
+As previously mentioned in Exercise 2, Azure Monitor operates as a consolidated pipeline for all monitoring data from Azure services.  It gives you access to performance metrics and events that describe the operation of the Azure infrastructure and any Azure services you are using.
 
 Azure Monitor is a monitoring data pipeline for your Azure environment, and offers that data directly into Log Analytics as well as 3rd party tools where you can gain insight into that data and combine it with data from on premises or other cloud resources.
 
@@ -555,11 +559,11 @@ Due to some unpredictability in regard to the current state of your Log Analytic
 
 Here's a snapshot of what to expect however:
 
-![Azure Monitor Log Analytics](images/42_AzureMonitorLogAnalytics.png?raw=true)
+![Azure Monitor Log Analytics](images/42_AzureMonitorLogAnalytics_b.png?raw=true)
 
 <br>
 
-![Azure Monitor Log Analytics](images/43_AzureMonitorLogAnalyticsOpen.png?raw=true)
+![Azure Monitor Log Analytics](images/43_AzureMonitorLogAnalyticsOpen_b.png?raw=true)
 
 <br>
 
@@ -612,7 +616,7 @@ You will see references to where Network Watcher has been enabled under each Sub
 
 <br>
 
-You now need to enable Network Watcher for the Region that your VM is deployed in and under the same Subscription (in the same Subscription because that's where you have permission to do so rather than it being a requirement that they're the same).  The process looks like this:
+You now need to enable Network Watcher for the Region that your VM is deployed in and under the same Subscription (in the same Subscription because that's where you definitely have access rights to do so rather than it being a requirement that they're the same).  The process looks like this:
 
 ![Azure Monitor Network Watcher Enable](images/49_AzureMonitorNetworkWatcherExpand.png?raw=true)
 
@@ -649,7 +653,7 @@ Right, that's the Topology function.  Now, we'll take a look at the 'Next Hop' f
 
 Click 'Next Hop'.  Some of the inputs may actually already be what you want them to be but, if not, please go through the 'Subscription', 'Resource group', 'Virtual machine', 'Network interface', and 'Source IP address' inputs in that order.  Each step should go *down a level* to get to the IP address of the VM that you're working with.
 
-Lastly, choose a destination IP address and click 'Next hop'.  I have chosen Google's first DNS Service endpoint (8.8.8.8 with the second being 8.8.4.4).  This should route via *Internet* because I haven't applied any UDR to the Subnet that will cause a different forwarding policy to the default.
+Lastly, choose a destination IP address and click 'Next hop'.  I have chosen Google's first DNS Service endpoint (8.8.8.8 with the second being 8.8.4.4).  This should route via *Internet* because I/you haven't applied any UDR to the Subnet that will cause a different forwarding policy to the default.
 
 Here's my output:
 
@@ -742,7 +746,7 @@ Note. To use Azure Advisor with a subscription, a subscription Owner must launch
 
 ### Step 1 - Browse to Azure Advisor
 
-Click 'All services' in the top left corner of your browser window, scroll down to the 'MONITORING + MANAGEMENT' section, and select Activity Log.
+Click 'All services' in the top left corner of your browser window, scroll down to the 'MONITORING + MANAGEMENT' section, and select 'Advisor'.
 
 ![Visit the Activity Log](images/55_AdvisorVisit.png?raw=true)
 
@@ -758,15 +762,15 @@ Click 'All services' in the top left corner of your browser window, scroll down 
 
 <br>
 
-![Subscription View](images/58_AdvisorFilterSubscription2?raw=true)
+![Subscription View](images/58_AdvisorFilterSubscription2.png?raw=true)
 
 <br>
 
 ### Step 3 - High Availability recommendations
 
+Now you'll take a look at the recommendations that Advisor is giving in the area of high availability.  Click on 'High Availability' in one of the two places highlighted below.
 
-
-![Subscription View](images/57_AdvisorFilterSubscription.png?raw=true)
+![Subscription View](images/59_AdvisorNavigateRecommendationsHA.png?raw=true)
 
 <br><br>
 
