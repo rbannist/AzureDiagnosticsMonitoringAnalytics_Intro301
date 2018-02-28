@@ -165,10 +165,10 @@ Now, add names and change the settings:
 
 Re. actions, amongst a few options, you can configure a metric alert to do the following:
 * Send email notifications.
-* Call a webhook (e.g. a Logic App or Function HTTP trigger).
+* Call a webhook.
 * Start execution of an Azure Automation runbook.
 
-Here is the full list of action options as of 01/18:
+Here is a capture of the action options as of 01/18:
 
 ![Create EMail Alert NIC New or Change Any Resource](images/6_AlertActions.png?raw=true)
 
@@ -186,7 +186,7 @@ Name your action `Network Interface Write` ...
 
 <br>
 
-...and click 'OK' to finish and wait a few seconds until:
+...then click 'OK' to finish and wait a few seconds until:
 
 ![Create Alert and Action Group notification](images/9_AlertandActionGroupCreated.png?raw=true)
 
@@ -206,7 +206,7 @@ Navigate using the same method as before:
 
 <br>
 
-You will be taken to a page that should list the new alert that you just created.  You should also see an 'Add activity log alert' button (which you'll not click on but, FYI, that's how you create an alert from the main Alerts page vs. at the Activity Log level).
+You will be taken to a page that should list the alert that you just created.  You should also see an 'Add activity log alert' button (which you'll not click on but, FYI, that's how you create an alert from the main Alerts page vs. at the Activity Log level).
 
 ![Alerts page](images/12_AlertsDashboard.png?raw=true)
 
@@ -240,7 +240,7 @@ An e-mail should now arrive in the inbox of the account entered when the Alert A
 
 <br>
 
-You have now configured an Alert and verified that it's being triggered under the right circumstances and that the action that is triggered successfully completes.
+You have now configured an Alert, verified that it's being triggered under the right circumstances, and verified that the triggered action successfully completes.
 
 <br>
 
@@ -320,7 +320,7 @@ You will see that boot diagnostics is already turned on and the logs are being s
 
 <br>
 
-If your Boot Diagnostics isn't switched on then please move the toggle switch to 'On', choose an existing Storage Account or create a new one, ensure that the 'Boot diagnostics' check box is selected, and then click 'Save'.  Note. I advise opening up the Azure Portal in another tab/window and then reboot the VM (or do it using Azure CLI or PowerShell).
+If your Boot Diagnostics isn't switched on then please move the toggle switch to 'On', choose an existing Storage Account or create a new one, ensure that the 'Boot diagnostics' check box is selected, and then click 'Save'.  Note. I advise opening up the Azure Portal in another tab/window and then reboot the VM from there before moving on (or do this using Azure CLI or PowerShell).
 
 <br>
 
@@ -465,7 +465,7 @@ Here you can see all of the options available to you in respect to guest-level m
 
 Click on the 'Performance counters' tab or 'Configure performance counters' on the 'Overview' tab.
 
-Take a look.  What performance counters are on and what is the sample rate?
+Take a look.  What performance counters are turned on and what are the sample rates?
 
 ![Diagnostics Settings Performance Counters](images/33_DiagnosticsSettings.png?raw=true)
 
@@ -509,7 +509,7 @@ When you open the Azure Monitor page, you can select among the subscriptions tha
 * Azure Service Health
   * You can see a count of Service Health service issues, planned maintenance events, and health advisories.  Azure Service Health provides personalised information when problems in the Azure infrastructure impact your services
 * Application Insights.
-  * See KPIs for each AppInsights resource in the current subscription.  The KPIs are optimised for server-side application monitoring across ASP.NET web apps, Java, Node, and General application types.  The KPIs include metrics for request rate, response duration, failure rate, and availability %.
+  * Application Insights is an Azure service that helps you get actionable insights through application performance management and instant analytics.  Within Azure Monitor, you can see KPIs for each AppInsights resource in the current subscription.  The KPIs are optimised for server-side application monitoring across ASP.NET web apps, Java, Node, and General application types.  The KPIs include metrics for request rate, response duration, failure rate, and availability %.
 
 If you have not on-boarded to Log Analytics or Application Insights, or if you have not configured any Azure Alerts in the current subscription, this page provides links to begin your on-boarding process.
 
@@ -541,7 +541,7 @@ Let's take a look at the Read and Write activity on your VM's virtual OS disk.  
 
 <br>
 
-This is the type of information that is very useful when dealing with Investigation and Diagnosis under the framing of ITIL Problem Management!
+This is the type of information that is very useful when dealing with Investigation and Diagnosis within the context of ITIL Problem Management!
 
 <br>
 
@@ -712,9 +712,49 @@ Give the alert a name and move down to the 'Service' drop-down.  Explore the opt
 
 <br>
 
+Move down to the 'Region(s)' drop-down menu and select 'North Europe' and 'West Europe'.
 
+![Azure Monitor Service Health Alert](images/54_6_ServiceHealthAlert3.png?raw=true)
 
-![Azure Monitor Service Health Alert](images/54_5_ServiceHealthAlert2.png?raw=true)
+<br>
+
+Put a tick in the box for 'Select All' within the 'Type' drop-down menu.
+
+![Azure Monitor Service Health Alert](images/54_7_ServiceHealthAlert4.png?raw=true)
+
+<br>
+
+Lastly, for ease, you'll reuse the action group that you created earlier to setup an action when this alert triggers.
+
+The action group that you created earlier includes an action called 'Network Interface Write' which is obviously not a name that's associated with what you're working on right now.  However, the actual action - an e-mail to you - is relevant.
+
+Note. Please feel free to create a new action group if you would like to do so.
+
+Click 'Use existing' under 'Alert via' and then select the action group that you created earlier.
+
+![Azure Monitor Service Health Alert](images/54_8_ServiceHealthAlert5.png?raw=true)
+
+<br>
+
+You will see if this if all goes well:
+
+![Azure Monitor Service Health Alert](images/54_9_ServiceHealthAlert6.png?raw=true)
+
+<br>
+
+The alert that you've just created will only trigger if there is indeed an issue with Azure AD related to the North Europe and West Europe Regions.  This is extremely unlikely at anytime.
+
+So, you'll conclude this exercise by verifying that that the alert that you've just created is indeed in place.
+
+Click 'Health alerts (NEW)' to open the service health alerts blade.
+
+![Azure Monitor Service Health Alert](images/54_10_ServiceHealthAlert7.png?raw=true)
+
+<br>
+
+You should see an entry for your alert with all of the settings that you put in place listed.
+
+![Azure Monitor Service Health Alert](images/54_11_ServiceHealthAlert8.png?raw=true)
 
 <br>
 
@@ -768,23 +808,55 @@ Click 'All services' in the top left corner of your browser window, scroll down 
 
 ### Step 3 - High Availability recommendations
 
-Now you'll take a look at the recommendations that Advisor is giving in the area of high availability.  Click on 'High Availability' in one of the two places highlighted below.
+Now you'll take a look at the recommendations that Advisor is giving in the area of *high availability*.  Click on 'High Availability' in one of the two places highlighted below.
 
-![Subscription View](images/59_AdvisorNavigateRecommendationsHA.png?raw=true)
-
-<br><br>
-
-## Exercise 6 - Explore App Insights
-
-Application Insights offers application performance monitoring and user analytics.  It monitors the code that you've written and applications that you've deployed on Azure, on-premises, or other clouds.  By instrumenting your application with the Application Insights SDK you can get access to a range of data including response times of dependencies, exception traces, debugging snapshots, and execution profiles.  It provides powerful tools for analysing this application telemetry while developing and operating your application.  It deeply integrates with Visual Studio to enable you to get right to the problem line(s) of code so you can fix it, and offers usage analytics to analyse customer usage of your applications for product managers as well.
+![Navigate High Availability](images/59_AdvisorNavigateRecommendationsHA.png?raw=true)
 
 <br>
 
-Richard/James to demonstrate.
+The view that you're presented with is based on your particular environment.  As you deployed only a single VM in an Availability Set and there was no step to enable Backup of the VM, I anticipate that your view is quite similar to what is shown below:
+
+![High Availability Recommendations](images/60_AdvisorRecommendationsHA.png?raw=true)
+
+If it is not, please work with what is presented or use the upcoming images as a guide.
+
+<br>
+
+Click on 'Add more virtual machines for improved fault tolerance' (or any option available to you).
+
+<br>
+
+You should be presented with a page like what's shown below which will include a list of recommendations, links to guides on how to perform the recommended changes, and an option to snooze each of the recommendation notifications:
+
+![High Availability Linux VM](images/61_AdvisorRecommendationsHALinuxFW.png?raw=true)
+
+In my environment, one suggested change is to add a second VM in an Availabily Set that currently hosts a single Linux VM acting as a firewall.  Note. The name of my Availability Set tells me what it's hosting (i.e. 'lfw' = Linux Firewall)... and I also recall building the environment...
+
+<br>
+
+Now we'll head to back to the main Azure Advisor page to look at what recomendations that it has for us in the area of *Security*.  Click on the 'Advisor Recommensations' link near the top of the page:
+
+![Navigate back to Azure Advisor](images/62_AdvisorBrowseBack.png?raw=true)
+
+<br>
+
+Click on 'Security':
+
+![Azure Advisor Security Recommendations](images/63_AdvisorBrowseSecurity.png?raw=true)
+
+<br>
+
+Here you will [hopefully] see all of Azure Advisor's security-related recommendations for your Subscription.  Click through what is displayed and take time to understand what is presented inc. the option to *fix* from within Azure Advisor.
+
+![Azure Advisor Security Recommendations](images/64_AdvisorRecommendationsSecurity.png?raw=true)
+
+<br>
+
+#### END OF EXERCISE 5
 
 <br><br>
 
-## Exercise 7 - Explore Security Center
+## Exercise 6 - Explore Security Center
 
 Azure Security Center provides security management and advanced threat protection across hybrid cloud workloads.  You can apply security policies across your workloads, limit your exposure to threats, and detect and respond to attacks.  Securiy Center provides:
 
@@ -797,6 +869,31 @@ Azure Security Center provides security management and advanced threat protectio
 
 <br>
 
-Richard/James to demonstrate.
+Azure Security Center is linked into/from Azure Advisor:
+![Azure Advisor Security Center](images/65_AdvisorSecurityCenter.png?raw=true)
+
+<br>
+
+Richard/James to demonstrate from here.
+
+<br>
+
+#### END OF EXERCISE 6
 
 <br><br>
+
+## Exercise 7 - Explore App Insights
+
+Application Insights offers application performance monitoring and user analytics.  It monitors the code that you've written and applications that you've deployed on Azure, on-premises, or other clouds.  By instrumenting your application with the Application Insights SDK you can get access to a range of data including response times of dependencies, exception traces, debugging snapshots, and execution profiles.  It provides powerful tools for analysing this application telemetry while developing and operating your application.  It deeply integrates with Visual Studio to enable you to get right to the problem line(s) of code so you can fix it, and offers usage analytics to analyse customer usage of your applications for product managers as well.
+
+<br>
+
+Richard/James to demonstrate.
+
+<br>
+
+#### END OF EXERCISE 7
+
+<br><br>
+
+#### END OF ALL EXERCISES
